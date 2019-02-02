@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"log"
 	"regexp"
 	"strconv"
 )
@@ -58,7 +57,7 @@ func (scanner Scanner) getToken() Token {
 		numberValBuffer, err := strconv.ParseFloat(scanner.numberStrBuffer, 64)
 
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 
 		scanner.numberValBuffer = numberValBuffer
