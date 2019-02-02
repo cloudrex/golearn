@@ -15,13 +15,13 @@ type Scanner struct {
 	numberValBuffer  float64
 }
 
-func nextChar(scanner Scanner) string {
+func (scanner Scanner) nextChar() string {
 	scanner.pos++
 
 	return string(scanner.input[scanner.pos])
 }
 
-func getToken(scanner Scanner) Token {
+func (scanner Scanner) getToken() Token {
 	lastChar := " "
 	whitespacePattern := regexp.MustCompile(`\s`)
 	identifierPattern := regexp.MustCompile(`[a-zA-Z][a-zA-Z0-9]*`)
@@ -38,7 +38,7 @@ func getToken(scanner Scanner) Token {
 
 		for identifierPattern.MatchString(lastChar) {
 			scanner.identifierBuffer += lastChar
-			lastChar = nextChar(scanner)
+			lastChar = scanner.nextChar()
 		}
 
 		if scanner.identifierBuffer == "fn" {
@@ -52,7 +52,7 @@ func getToken(scanner Scanner) Token {
 		// TODO: Should be do-while
 		for numberPattern.MatchString(lastChar) {
 			scanner.numberStrBuffer += lastChar
-			lastChar = nextChar(scanner)
+			lastChar = scanner.nextChar()
 		}
 
 		numberValBuffer, err := strconv.ParseFloat(scanner.numberStrBuffer, 64)
