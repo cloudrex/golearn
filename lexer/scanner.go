@@ -3,6 +3,7 @@ package lexer
 import (
 	"regexp"
 	"strconv"
+	"io"
 )
 
 // Scanner : Breaks up input code into tokens.
@@ -65,7 +66,7 @@ func (scanner Scanner) getToken() Token {
 		return TokenNumber
 	} else if lastChar == "#" {
 		// TODO
-	} else if lastChar == "eof" {
+	} else if lastChar == io.EOF {
 		return TokenEOF
 	}
 
