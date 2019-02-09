@@ -28,8 +28,10 @@ func scan(input string) []Token {
 			token = TokenKindAddOp
 		} else if identifierExpr.MatchString(text) { // Identifier.
 			token = TokenKindIdentifier
-		} else if text == "(" { // Parentheses expression start '('.
+		} else if text == "(" { // Parentheses start '('.
 			token = TokenKindParenStart
+		} else if text == ")" { // Parentheses end ')'.
+			token = TokenKindParenEnd
 		}
 
 		tokens = append(tokens, Token{token, text})
