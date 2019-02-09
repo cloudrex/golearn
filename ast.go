@@ -64,7 +64,18 @@ func (ast *AST) block() {
 }
 
 func (ast *AST) statement() StatementAST {
-	// TODO.
+	tokens := ast.parser.until(TokenKindSemiColon)
+
+	// Validate captured tokens.
+	for i := 0; i < len(tokens); i++ {
+		token := tokens[i]
+		valid := false
+
+		if (token.kind != TokenKindIdentifier) {
+		}
+	}
+
+	return StatementAST{tokens: tokens}
 }
 
 // Process and validate an identifier.
