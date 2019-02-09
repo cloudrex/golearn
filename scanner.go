@@ -32,6 +32,12 @@ func scan(input string) []Token {
 			token = TokenKindParenStart
 		} else if text == ")" { // Parentheses end ')'.
 			token = TokenKindParenEnd
+		} else if text == "{" { // Block start '{'.
+			token = TokenKindBlockStart
+		} else if text == "}" { // Block end '{'.
+			token = TokenKindBlockEnd
+		} else if text == ";" { // Semi-colon ';'.
+			token = TokenKindSemiColon
 		}
 
 		tokens = append(tokens, Token{token, text})

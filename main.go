@@ -11,27 +11,12 @@ func main() {
 
 	var tokens = scan(src)
 	var parser = newParser(tokens)
+	var ast = AST{parser: parser}
 
 	for token := parser.get(); parser.get().kind != TokenKindEndOfFile; token = parser.next() {
 		if token.kind == TokenKindFn { // Function declaration 'fn'.
-			// Must be followed by an identifier.
-			if parser.peek().kind != TokenKindIdentifier {
-				parser.fatal("Expecting identifier after function definition keyword")
-
-				return
-			}
-
-			// Consume identifier.
-			token = parser.cycle().next()
-
-			if token.kind != TokenKindParenStart {
-				parser.fatal("Expecting argument list after function identifier")
-
-				return
-			}
-
-			// Invoke function argument parser.
-			parser.processFnArgs()
+			// Invoke the function AST generator.
+			ast.function()
 		} else if token.kind == TokenKindUnknown { // Unknown token.
 			parser.fatal("Unknown token")
 

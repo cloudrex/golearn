@@ -89,18 +89,3 @@ func (parser *Parser) get() Token {
 func (parser Parser) derive() Parser {
 	return parser
 }
-
-// Process and validate function arguments.
-func (parser *Parser) processFnArgs() error {
-	derived := parser.derive()
-
-	for token := derived.get(); token.kind != TokenKindParenEnd; token = derived.next() {
-		fmt.Println("Parsing args ... Pos", derived.pos)
-
-		if derived.peek().kind == TokenKindEndOfFile {
-			derived.fatal("Expecting end of function argument list")
-		}
-	}
-
-	return nil
-}

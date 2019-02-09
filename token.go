@@ -30,6 +30,15 @@ const (
 
 	// TokenKindComma : Represents ','.
 	TokenKindComma TokenKind = 7
+
+	// TokenKindBlockStart : Represents the start of a statement block '{'.
+	TokenKindBlockStart TokenKind = 8
+
+	// TokenKindBlockEnd : Represents the end of a statement block '{'.
+	TokenKindBlockEnd TokenKind = 9
+
+	// TokenKindSemiColon : Represents the semi-colon token ';'.
+	TokenKindSemiColon TokenKind = 10
 )
 
 // Token : Represents a single token.
