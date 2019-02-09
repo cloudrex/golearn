@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // Parser : Handles parsing and breaking down code into nodes.
 type Parser struct {
@@ -40,13 +38,37 @@ func (parser *Parser) fatal(message string) {
 	panic(parser.err(message))
 }
 
-// Retrieve the next token in the list. Does not change parser position.
+// Retrieve the next token in the list without changing the parser's position.
 func (parser *Parser) peek() Token {
 	if parser.pos >= len(parser.tokens) {
 		return Token{kind: TokenKindEndOfFile}
 	}
 
 	return parser.tokens[parser.pos+1]
+}
+
+// Traverse the token list until the specified token kind is found without changing parser's position.
+func (parser *Parser) peekUntil(kind TokenKind) []Token {
+	var tokens []Token
+
+	for token := parser.get(); token.kind != kind; token = parser.next() {
+		if token.kind == TokenKindEndOfFile {
+			parser.fatal(fmt.Sprintf("Unexpected end of input tokens, expecting token kind:", kind))
+		}
+
+		tokens = append(tokens, token)
+	}
+
+	return tokens
+}
+
+// Traverse the token list until the specified token kind is found.
+func (parser *Parser) until(kind TokenKind) []Token {
+	tokens := parser.peekUntil(kind)
+
+	parser.teleport(len(tokens))
+
+	return tokens
 }
 
 // Verifies that current position is within bounds, otherwise relocates position to corresponding position.

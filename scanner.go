@@ -6,10 +6,17 @@ import (
 	"text/scanner"
 )
 
-func scan(input string) []Token {
+// Scanner : Represents the lexical token scanner utility.
+type Scanner struct {
+}
+
+func isIdentifier(input string) bool {
+	return regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$").MatchString(input)
+}
+
+func (sc *Scanner) scan(input string) []Token {
 	var scan scanner.Scanner
 	var tokens []Token
-	var identifierExpr = regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$")
 
 	scan.Init(strings.NewReader(input))
 	scan.Filename = "example"
@@ -26,7 +33,7 @@ func scan(input string) []Token {
 			token = TokenKindExit
 		} else if text == "+" { // Addition operator '+'.
 			token = TokenKindAddOp
-		} else if identifierExpr.MatchString(text) { // Identifier.
+		} else if isIdentifier(text) { // Identifier.
 			token = TokenKindIdentifier
 		} else if text == "(" { // Parentheses start '('.
 			token = TokenKindParenStart

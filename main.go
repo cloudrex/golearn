@@ -9,7 +9,8 @@ import (
 func main() {
 	const src = `fn hello ()`
 
-	var tokens = scan(src)
+	var scanner = Scanner{}
+	var tokens = scanner.scan(src)
 	var parser = newParser(tokens)
 	var ast = AST{parser: parser}
 

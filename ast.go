@@ -7,6 +7,16 @@ type AST struct {
 	parser *Parser
 }
 
+// IdentifierAST : Represents the identifier AST node.
+type IdentifierAST struct {
+	name string
+}
+
+// StatementAST : Represents a statement AST node.
+type StatementAST struct {
+	tokens []Token
+}
+
 // Process and validate function.
 func (ast *AST) function() {
 	// Must be followed by an identifier.
@@ -49,8 +59,21 @@ func (ast *AST) block() {
 	if token.kind != TokenKindBlockStart {
 		ast.parser.fatal("Expecting block start: '{'")
 	}
+
+	// TODO.
 }
 
-func (ast *AST) statement() {
-	// TODO
+func (ast *AST) statement() StatementAST {
+	// TODO.
+}
+
+// Process and validate an identifier.
+func (ast *AST) identifier() IdentifierAST {
+	token := ast.parser.get()
+
+	if !isIdentifier(token.value) {
+		ast.parser.fatal("Expecting an identifier")
+	}
+
+	return IdentifierAST{name: token.value}
 }
