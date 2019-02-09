@@ -29,9 +29,9 @@ func main() {
 
 	var module = ir.NewModule()
 
-	fn := FunctionAST{module: module, name: "very fun func"}
+	fn := FunctionAST{name: "very fun func"}
 
-	fn.create()
+	fn.create(module)
 
 	// fmt.Println(strings.Join(values, " "))
 	// Print the LLVM IR assembly of the module.

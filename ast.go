@@ -17,6 +17,11 @@ type StatementAST struct {
 	tokens []Token
 }
 
+// ExpressionAST : Represents an expression AST node.
+type ExpressionAST struct {
+	tokens []Token
+}
+
 // Process and validate function.
 func (ast *AST) function() {
 	// Must be followed by an identifier.
@@ -63,6 +68,10 @@ func (ast *AST) block() {
 	// TODO.
 }
 
+func (ast *AST) expression() ExpressionAST {
+	// TODO.
+}
+
 func (ast *AST) statement() StatementAST {
 	tokens := ast.parser.until(TokenKindSemiColon)
 
@@ -71,7 +80,8 @@ func (ast *AST) statement() StatementAST {
 		token := tokens[i]
 		valid := false
 
-		if (token.kind != TokenKindIdentifier) {
+		if token.kind == TokenKindIdentifier {
+			valid = true
 		}
 	}
 

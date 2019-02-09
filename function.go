@@ -11,18 +11,17 @@ type FunctionAST struct {
 	name       string
 	args       []*FunctionArgAST
 	returnType types.Type
-	module     *ir.Module
 	body       *ir.Block
 }
 
-func (function FunctionAST) create() {
+func (function FunctionAST) create(module *ir.Module) {
 	var args []*ir.Param
 
 	for i := 0; i < len(function.args); i++ {
 		args[i] = function.args[i].get()
 	}
 
-	fn := function.module.NewFunc(function.name, function.returnType, args...)
+	fn := module.NewFunc(function.name, function.returnType, args...)
 
 	// Add the body block.
 	block := fn.NewBlock("body")
