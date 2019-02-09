@@ -24,11 +24,14 @@ func main() {
 			// Consume identifier.
 			token = parser.cycle().next()
 
-			if token.value != "(" {
+			if token.kind != TokenKindParenStart {
 				fmt.Println(parser.err("Expecting argument list after function identifier"))
 
 				return
 			}
+
+			// Invoke function argument parser.
+			parser.processFnArgs()
 		} else if token.kind == TokenKindUnknown { // Unknown token.
 			fmt.Println(parser.err("Unknown token"))
 

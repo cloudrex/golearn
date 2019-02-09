@@ -21,6 +21,15 @@ const (
 
 	// TokenKindIdentifier : Represents an identifier.
 	TokenKindIdentifier TokenKind = 4
+
+	// TokenKindParenStart : Represents the opening token of a parentheses expression '('.
+	TokenKindParenStart TokenKind = 5
+
+	// TokenKindParenEnd : Represents the closing token of a parentheses expression ')'.
+	TokenKindParenEnd TokenKind = 6
+
+	// TokenKindComma : Represents ','.
+	TokenKindComma TokenKind = 7
 )
 
 // Token : Represents a single token.
