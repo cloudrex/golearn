@@ -16,7 +16,7 @@ func main() {
 		if token.kind == TokenKindFn { // Function declaration 'fn'.
 			// Must be followed by an identifier.
 			if parser.peek().kind != TokenKindIdentifier {
-				fmt.Println(parser.err("Expecting identifier after function definition keyword"))
+				parser.fatal("Expecting identifier after function definition keyword")
 
 				return
 			}
@@ -25,7 +25,7 @@ func main() {
 			token = parser.cycle().next()
 
 			if token.kind != TokenKindParenStart {
-				fmt.Println(parser.err("Expecting argument list after function identifier"))
+				parser.fatal("Expecting argument list after function identifier")
 
 				return
 			}
@@ -33,7 +33,7 @@ func main() {
 			// Invoke function argument parser.
 			parser.processFnArgs()
 		} else if token.kind == TokenKindUnknown { // Unknown token.
-			fmt.Println(parser.err("Unknown token"))
+			parser.fatal("Unknown token")
 
 			return
 		}

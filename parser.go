@@ -98,7 +98,7 @@ func (parser *Parser) processFnArgs() error {
 		fmt.Println("Parsing args ... Pos", derived.pos)
 
 		if derived.peek().kind == TokenKindEndOfFile {
-			derived.err("Expecting end of function argument list")
+			derived.fatal("Expecting end of function argument list")
 		}
 	}
 
