@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 	"text/scanner"
 )
@@ -8,6 +9,7 @@ import (
 func scan(input string) []Token {
 	var scan scanner.Scanner
 	var tokens []Token
+	var identifierExpr = regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$")
 
 	scan.Init(strings.NewReader(input))
 	scan.Filename = "example"
@@ -24,6 +26,8 @@ func scan(input string) []Token {
 			token = TokenKindExit
 		} else if text == "+" { // Addition operator '+'.
 			token = TokenKindAddOp
+		} else if identifierExpr.MatchString(text) { // Identifier.
+			token = TokenKindIdentifier
 		}
 
 		tokens = append(tokens, Token{token, text})
