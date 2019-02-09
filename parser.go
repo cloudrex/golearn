@@ -85,7 +85,7 @@ func (parser *Parser) get() Token {
 	return parser.tokens[parser.pos]
 }
 
-// Clones the parser with it's current data.
+// Clones the parser along with it's current state.
 func (parser Parser) derive() Parser {
 	return parser
 }
