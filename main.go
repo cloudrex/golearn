@@ -30,7 +30,7 @@ func main() {
 				return
 			}
 		} else if token.kind == TokenKindUnknown { // Unknown token.
-			fmt.Println("Unknown token at position", parser.pos)
+			fmt.Println(parser.err("Unknown token"))
 
 			return
 		}
