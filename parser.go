@@ -53,7 +53,7 @@ func (parser *Parser) peekUntil(kind TokenKind) []Token {
 
 	for token := parser.get(); token.kind != kind; token = parser.next() {
 		if token.kind == TokenKindEndOfFile {
-			parser.fatal(fmt.Sprintf("Unexpected end of input tokens, expecting token kind:", kind))
+			parser.fatal(fmt.Sprintf("Unexpected end of input tokens, expecting token kind: %v", kind))
 		}
 
 		tokens = append(tokens, token)
