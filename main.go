@@ -5,7 +5,7 @@ import (
 	"golearn/parser"
 	"golearn/scanner"
 
-	"golearn/ast"
+	"golearn/codegen"
 
 	"github.com/llir/llvm/ir"
 )
@@ -16,7 +16,7 @@ func main() {
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
 	var parser = parser.NewParser(tokens)
-	var generator = ast.Ast{Parser: parser}
+	var generator = codegen.Ast{Parser: parser}
 
 	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
 		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.
@@ -34,7 +34,7 @@ func main() {
 	var module = ir.NewModule()
 
 	// TODO: Creating function for debugging/testing.
-	fn := ast.FunctionAST{Name: "very fun func"}
+	fn := codegen.FunctionAST{Name: "very fun func"}
 
 	fn.Create(module)
 

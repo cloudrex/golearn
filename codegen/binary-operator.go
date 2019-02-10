@@ -1,4 +1,4 @@
-package ast
+package codegen
 
 // BinaryOperationAST : Represents a binary operation AST node.
 type BinaryOperationAST struct {

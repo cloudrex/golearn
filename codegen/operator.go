@@ -1,4 +1,4 @@
-package ast
+package codegen
 
 // OperatorKind : Represents the type of an operator.
 type OperatorKind = int

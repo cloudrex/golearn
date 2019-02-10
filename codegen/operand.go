@@ -1,4 +1,4 @@
-package ast
+package codegen
 
 // OperandKind : Represents the type of operand used in an operation.
 type OperandKind = int

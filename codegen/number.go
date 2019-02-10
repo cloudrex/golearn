@@ -1,4 +1,4 @@
-package ast
+package codegen
 
 import (
 	"github.com/llir/llvm/ir/constant"
