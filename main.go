@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	const src = `fn hello ()`
+	const src = `fn hello () {`
 
 	var scanner = Scanner{}
 	var tokens = scanner.scan(src)

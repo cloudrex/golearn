@@ -4,8 +4,9 @@ import "fmt"
 
 // Parser : Handles parsing and breaking down code into nodes.
 type Parser struct {
-	tokens []Token
-	pos    int
+	tokens     []Token
+	pos        int
+	syncTarget *Parser
 }
 
 // Initializes a new parser.
@@ -22,7 +23,7 @@ func newParser(tokens []Token) *Parser {
 }
 
 // Increment parser position.
-func (parser *Parser) cycle() *Parser {
+func (parser *Parser) consume() *Parser {
 	parser.next()
 
 	return parser
@@ -84,20 +85,43 @@ func (parser *Parser) bounds() *Parser {
 
 // Retrieve the next token in the list. Increments parser position.
 func (parser *Parser) next() Token {
-	// Stop if on the last token.
-	if parser.pos+1 < len(parser.tokens) {
-		parser.pos++
-	}
+	parser.navigate(1)
 
 	return parser.tokens[parser.pos]
 }
 
-// Changes the position of the parser.
-func (parser *Parser) teleport(change int) *Parser {
-	parser.pos += change
+// Sync local position upon remote parser's position change.
+func (parser *Parser) sync(target *Parser) *Parser {
+	parser.syncTarget = target
+
+	return parser
+}
+
+// Remove attached sync parser to stop tracking position.
+func (parser *Parser) unlink() *Parser {
+	parser.syncTarget = nil
+
+	return parser
+}
+
+// Changes the relative position of the parser.
+func (parser *Parser) navigate(deltaPos int) *Parser {
+	parser.teleport(parser.pos + deltaPos)
+
+	return parser
+}
+
+// Changes the absolute position of the parser.
+func (parser *Parser) teleport(pos int) *Parser {
+	parser.pos = pos
 
 	// Reset position bounds if applicable.
 	parser.bounds()
+
+	// Report change to attached sync target if applicable.
+	if parser.syncTarget != nil {
+		parser.syncTarget.teleport(parser.pos)
+	}
 
 	return parser
 }

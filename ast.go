@@ -107,7 +107,7 @@ func (ast *Ast) function() {
 	}
 
 	// Consume identifier.
-	token := ast.parser.cycle().next()
+	token := ast.parser.consume().next()
 
 	if token.kind != TokenKindParenStart {
 		ast.parser.fatal("Expecting argument list after function identifier: '('")
@@ -117,6 +117,17 @@ func (ast *Ast) function() {
 
 	// Invoke function argument parser.
 	ast.functionArgs()
+
+	// Verify block start is present after argument list.
+	token = ast.parser.next()
+
+	if token.kind != TokenKindBlockStart {
+		fmt.Println("Type is", token)
+		ast.parser.fatal("Expecting statement block after function argument list: '{'")
+	}
+
+	// Invoke block parser.
+	ast.block()
 }
 
 // Process and validate function arguments.
@@ -124,12 +135,20 @@ func (ast *Ast) functionArgs() {
 	derived := ast.parser.derive()
 
 	for token := derived.get(); token.kind != TokenKindParenEnd; token = derived.next() {
+		// TODO: Debugging.
 		fmt.Println("Parsing args ... Pos", derived.pos)
 
+		// TODO: Need to process args.
 		if derived.peek().kind == TokenKindEndOfFile {
 			derived.fatal("Expecting end of function argument list: ')'")
 		}
 	}
+
+	// Consume argument list end ')'.
+	derived.consume()
+
+	// Apply new position to the original parser.
+	ast.parser.teleport(derived.pos)
 }
 
 // Save the current parser and apply a new parser.
