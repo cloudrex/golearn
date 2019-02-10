@@ -134,6 +134,9 @@ func (ast *Ast) function() {
 func (ast *Ast) functionArgs() {
 	derived := ast.parser.derive()
 
+	// Sync derived parser's position with original parser.
+	derived.sync(ast.parser)
+
 	for token := derived.get(); token.kind != TokenKindParenEnd; token = derived.next() {
 		// TODO: Debugging.
 		fmt.Println("Parsing args ... Pos", derived.pos)
@@ -146,9 +149,6 @@ func (ast *Ast) functionArgs() {
 
 	// Consume argument list end ')'.
 	derived.consume()
-
-	// Apply new position to the original parser.
-	ast.parser.teleport(derived.pos)
 }
 
 // Save the current parser and apply a new parser.
