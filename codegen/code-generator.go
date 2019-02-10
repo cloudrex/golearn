@@ -8,8 +8,8 @@ import (
 	"github.com/llir/llvm/ir"
 )
 
-// Ast : Represents the AST generator.
-type Ast struct {
+// CodeGenerator : Represents the code generator.
+type CodeGenerator struct {
 	Parser        *parser.Parser
 	stashedParser *parser.Parser
 }
@@ -53,7 +53,7 @@ func (block *BlockAST) create() *ir.Block {
 }
 
 // Function : Process and validate function.
-func (gen *Ast) Function() {
+func (gen *CodeGenerator) Function() {
 	// Must be followed by an identifier.
 	if gen.Parser.Peek().Kind != scanner.TokenKindIdentifier {
 		gen.Parser.Fatal("Expecting identifier after function definition keyword")
@@ -74,10 +74,13 @@ func (gen *Ast) Function() {
 	gen.functionArgs()
 
 	// Verify block start is present after argument list.
-	token = gen.Parser.Next()
+	token = gen.Parser.Peek()
 
+	// Override block start error for more specific feedback (regarding a function).
 	if token.Kind != scanner.TokenKindBlockStart {
+		// TODO: Debugging statement.
 		fmt.Println("Type is", token)
+
 		gen.Parser.Fatal("Expecting statement block after function argument list: '{'")
 	}
 
@@ -86,7 +89,7 @@ func (gen *Ast) Function() {
 }
 
 // Process and validate function arguments.
-func (gen *Ast) functionArgs() {
+func (gen *CodeGenerator) functionArgs() {
 	derived := gen.Parser.Derive()
 
 	// Sync derived parser's position with original parser.
@@ -101,13 +104,10 @@ func (gen *Ast) functionArgs() {
 			derived.Fatal("Expecting end of function argument list: ')'")
 		}
 	}
-
-	// Consume argument list end ')'.
-	derived.Consume()
 }
 
 // Save the current parser and apply a new parser.
-func (gen *Ast) applyParser(parser *parser.Parser) *Ast {
+func (gen *CodeGenerator) applyParser(parser *parser.Parser) *CodeGenerator {
 	gen.stashedParser = gen.Parser
 	gen.Parser = parser
 
@@ -115,20 +115,21 @@ func (gen *Ast) applyParser(parser *parser.Parser) *Ast {
 }
 
 // Revert the current parser to a previously stashed parser.
-func (gen *Ast) revertParser() *Ast {
+func (gen *CodeGenerator) revertParser() *CodeGenerator {
 	gen.Parser = gen.stashedParser
 
 	return gen
 }
 
 // Process and validate a statement block.
-func (gen *Ast) block() BlockAST {
+func (gen *CodeGenerator) block() BlockAST {
 	token := gen.Parser.Next()
 
 	if token.Kind != scanner.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
 	}
 
+	// Collect in-between tokens until the end of the block.
 	tokens := gen.Parser.Until(scanner.TokenKindBlockEnd)
 
 	// Create and apply a termporal new parser for local use.
@@ -148,7 +149,7 @@ func (gen *Ast) block() BlockAST {
 	return BlockAST{label: "anonymous_block", statements: statements}
 }
 
-func (gen *Ast) statement() BlockNode {
+func (gen *CodeGenerator) statement() BlockNode {
 	tokens := gen.Parser.Until(scanner.TokenKindSemiColon)
 
 	if len(tokens) == 1 || len(tokens) == 1 { // Empty statement.
@@ -165,13 +166,13 @@ func (gen *Ast) statement() BlockNode {
 	return node
 }
 
-func (gen *Ast) expression() ExpressionAST {
+func (gen *CodeGenerator) expression() ExpressionAST {
 	// TODO.
 	panic("Not yet implemented")
 }
 
 // Process and validate an identifier.
-func (gen *Ast) identifier() IdentifierAST {
+func (gen *CodeGenerator) identifier() IdentifierAST {
 	token := gen.Parser.Get()
 
 	if !scanner.IsIdentifier(token.Value) {

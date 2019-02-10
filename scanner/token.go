@@ -1,5 +1,11 @@
 package scanner
 
+// Token : Represents a single token.
+type Token struct {
+	Kind  TokenKind
+	Value string
+}
+
 // TokenKind : Represents a specific token kind or type.
 type TokenKind int
 
@@ -40,9 +46,3 @@ const (
 	// TokenKindSemiColon : Represents the semi-colon token ';'.
 	TokenKindSemiColon TokenKind = 10
 )
-
-// Token : Represents a single token.
-type Token struct {
-	Kind  TokenKind
-	Value string
-}

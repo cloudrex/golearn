@@ -11,12 +11,12 @@ import (
 )
 
 func main() {
-	const src = `fn hello () {`
+	const src = `fn hello () { ; }`
 
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
 	var parser = parser.NewParser(tokens)
-	var generator = codegen.Ast{Parser: parser}
+	var generator = codegen.CodeGenerator{Parser: parser}
 
 	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
 		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.
