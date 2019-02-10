@@ -12,7 +12,7 @@ func main() {
 	var scanner = Scanner{}
 	var tokens = scanner.scan(src)
 	var parser = newParser(tokens)
-	var ast = AST{parser: parser}
+	var ast = Ast{parser: parser}
 
 	for token := parser.get(); parser.get().kind != TokenKindEndOfFile; token = parser.next() {
 		if token.kind == TokenKindFn { // Function declaration 'fn'.

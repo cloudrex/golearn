@@ -81,12 +81,12 @@ type ExpressionAST struct {
 
 // BlockAST : Represents a statement block AST node.
 type BlockAST struct {
-	name       string
+	label      string
 	statements []AstBlockNode
 }
 
 func (block *BlockAST) create() *ir.Block {
-	irBlock := ir.NewBlock(block.name)
+	irBlock := ir.NewBlock(block.label)
 
 	for i := 0; i < len(block.statements); i++ {
 		statement := block.statements[i]
@@ -156,6 +156,8 @@ func (ast *Ast) block() BlockAST {
 	}
 
 	tokens := ast.parser.until(TokenKindBlockEnd)
+
+	// Create and apply a termporal new parser for local use.
 	parser := newParser(tokens)
 
 	ast.applyParser(parser)
@@ -169,7 +171,7 @@ func (ast *Ast) block() BlockAST {
 
 	ast.revertParser()
 
-	return BlockAST{name: "anonymous_block"}
+	return BlockAST{label: "anonymous_block", statements: statements}
 }
 
 func (ast *Ast) statement() AstBlockNode {
@@ -183,12 +185,7 @@ func (ast *Ast) statement() AstBlockNode {
 
 	// Validate captured tokens.
 	for i := 0; i < len(tokens); i++ {
-		token := tokens[i]
-		valid := false
-
-		if token.kind == TokenKindIdentifier {
-			valid = true
-		}
+		// TODO.
 	}
 
 	return node
