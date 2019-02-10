@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"regexp"
@@ -10,11 +10,13 @@ import (
 type Scanner struct {
 }
 
-func isIdentifier(input string) bool {
+// IsIdentifier : Determine if input is an identifier token.
+func IsIdentifier(input string) bool {
 	return regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$").MatchString(input)
 }
 
-func (sc *Scanner) scan(input string) []Token {
+// Scan : Scan and break up input into lexical tokens.
+func (sc *Scanner) Scan(input string) []Token {
 	var scan scanner.Scanner
 	var tokens []Token
 
@@ -33,7 +35,7 @@ func (sc *Scanner) scan(input string) []Token {
 			token = TokenKindExit
 		} else if text == "+" { // Addition operator '+'.
 			token = TokenKindAddOp
-		} else if isIdentifier(text) { // Identifier.
+		} else if IsIdentifier(text) { // Identifier.
 			token = TokenKindIdentifier
 		} else if text == "(" { // Parentheses start '('.
 			token = TokenKindParenStart

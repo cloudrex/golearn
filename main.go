@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"golearn/parser"
+	"golearn/scanner"
+
+	"golearn/ast"
 
 	"github.com/llir/llvm/ir"
 )
@@ -9,29 +13,30 @@ import (
 func main() {
 	const src = `fn hello () {`
 
-	var scanner = Scanner{}
-	var tokens = scanner.scan(src)
-	var parser = newParser(tokens)
-	var ast = Ast{parser: parser}
+	var lexer = scanner.Scanner{}
+	var tokens = lexer.Scan(src)
+	var parser = parser.NewParser(tokens)
+	var generator = ast.Ast{Parser: parser}
 
-	for token := parser.get(); parser.get().kind != TokenKindEndOfFile; token = parser.next() {
-		if token.kind == TokenKindFn { // Function declaration 'fn'.
+	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
+		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.
 			// Invoke the function AST generator.
-			ast.function()
-		} else if token.kind == TokenKindUnknown { // Unknown token.
-			parser.fatal("Unknown token")
+			generator.Function()
+		} else if token.Kind == scanner.TokenKindUnknown { // Unknown token.
+			parser.Fatal("Unknown token")
 
 			return
 		}
 
-		fmt.Println("[ Token:", parser.pos, "] ->", token.value, "(", token.kind, ")")
+		fmt.Println("[ Token:", parser.Pos, "] ->", token.Value, "(", token.Kind, ")")
 	}
 
 	var module = ir.NewModule()
 
-	fn := FunctionAST{name: "very fun func"}
+	// TODO: Creating function for debugging/testing.
+	fn := ast.FunctionAST{Name: "very fun func"}
 
-	fn.create(module)
+	fn.Create(module)
 
 	// fmt.Println(strings.Join(values, " "))
 	// Print the LLVM IR assembly of the module.

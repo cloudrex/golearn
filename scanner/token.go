@@ -1,4 +1,4 @@
-package main
+package scanner
 
 // TokenKind : Represents a specific token kind or type.
 type TokenKind int
@@ -43,6 +43,6 @@ const (
 
 // Token : Represents a single token.
 type Token struct {
-	kind  TokenKind
-	value string
+	Kind  TokenKind
+	Value string
 }

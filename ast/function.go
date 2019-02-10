@@ -1,4 +1,4 @@
-package main
+package ast
 
 import (
 	"github.com/llir/llvm/ir"
@@ -8,20 +8,21 @@ import (
 
 // FunctionAST : Represents the function node.
 type FunctionAST struct {
-	name       string
+	Name       string
 	args       []*FunctionArgAST
 	returnType types.Type
 	body       *ir.Block
 }
 
-func (function FunctionAST) create(module *ir.Module) {
+// Create : Create and apply the function into an LLVM module.
+func (function FunctionAST) Create(module *ir.Module) {
 	var args []*ir.Param
 
 	for i := 0; i < len(function.args); i++ {
 		args[i] = function.args[i].get()
 	}
 
-	fn := module.NewFunc(function.name, function.returnType, args...)
+	fn := module.NewFunc(function.Name, function.returnType, args...)
 
 	// Add the body block.
 	block := fn.NewBlock("body")

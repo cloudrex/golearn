@@ -1,4 +1,4 @@
-package main
+package ast
 
 import (
 	"github.com/llir/llvm/ir/constant"
