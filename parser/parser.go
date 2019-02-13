@@ -9,7 +9,7 @@ import (
 // Parser : Handles parsing and breaking down code into nodes.
 type Parser struct {
 	tokens     []scanner.Token
-	Pos        int
+	pos        int
 	syncTarget *Parser
 }
 
@@ -17,13 +17,18 @@ type Parser struct {
 func NewParser(tokens []scanner.Token) *Parser {
 	var parser = Parser{}
 
-	parser.Pos = 0
+	parser.pos = 0
 	parser.tokens = tokens
 
 	// Append the end of file token to the end.
 	parser.tokens = append(parser.tokens, scanner.Token{Kind: scanner.TokenKindEndOfFile})
 
 	return &parser
+}
+
+// GetPos : Retrieve the parser's position.
+func (parser *Parser) GetPos() int {
+	return parser.pos
 }
 
 // Consume : Increment parser position.
@@ -35,7 +40,7 @@ func (parser *Parser) Consume() *Parser {
 
 // Err : Creates an error with parser metadata.
 func (parser *Parser) Err(message string) error {
-	return fmt.Errorf("[At token position %v] %v", parser.Pos, message)
+	return fmt.Errorf("[At token position %v] %v", parser.pos, message)
 }
 
 // Fatal : Creates and displays a fatal error with parser metadata. Stops the application.
@@ -52,11 +57,11 @@ func (parser *Parser) Peek() scanner.Token {
 func (parser *Parser) PeekX(pos int) scanner.Token {
 	absPos := int(math.Abs(float64(pos)))
 
-	if parser.Pos+absPos >= len(parser.tokens) {
+	if parser.pos+absPos >= len(parser.tokens) {
 		return scanner.Token{Kind: scanner.TokenKindEndOfFile}
 	}
 
-	return parser.tokens[parser.Pos+absPos]
+	return parser.tokens[parser.pos+absPos]
 }
 
 // PeekUntil : Traverse the token list until the specified token kind is found without changing parser's position.
@@ -78,17 +83,17 @@ func (parser *Parser) PeekUntil(kind scanner.TokenKind) []scanner.Token {
 func (parser *Parser) Until(kind scanner.TokenKind) []scanner.Token {
 	tokens := parser.PeekUntil(kind)
 
-	parser.Teleport(len(tokens))
+	parser.Navigate(len(tokens))
 
 	return tokens
 }
 
 // Bounds : Verifies that current position is within bounds, otherwise relocates position to corresponding position.
 func (parser *Parser) Bounds() *Parser {
-	if parser.Pos >= len(parser.tokens) {
-		parser.Pos = len(parser.tokens)
-	} else if parser.Pos < 0 {
-		parser.Pos = 0
+	if parser.pos >= len(parser.tokens) {
+		parser.pos = len(parser.tokens) - 1
+	} else if parser.pos < 0 {
+		parser.pos = 0
 	}
 
 	return parser
@@ -98,11 +103,11 @@ func (parser *Parser) Bounds() *Parser {
 func (parser *Parser) Next() scanner.Token {
 	parser.Navigate(1)
 
-	return parser.tokens[parser.Pos]
+	return parser.tokens[parser.pos]
 }
 
-// Sync : Sync local position upon remote parser's position change.
-func (parser *Parser) Sync(target *Parser) *Parser {
+// Link : Sync remote target's position upon local position change.
+func (parser *Parser) Link(target *Parser) *Parser {
 	parser.syncTarget = target
 
 	return parser
@@ -117,21 +122,21 @@ func (parser *Parser) Unlink() *Parser {
 
 // Navigate : Changes the relative position of the parser.
 func (parser *Parser) Navigate(deltaPos int) *Parser {
-	parser.Teleport(parser.Pos + deltaPos)
+	parser.Teleport(parser.pos + deltaPos)
 
 	return parser
 }
 
 // Teleport : Changes the absolute position of the parser.
 func (parser *Parser) Teleport(pos int) *Parser {
-	parser.Pos = pos
+	parser.pos = pos
 
 	// Reset position bounds if applicable.
 	parser.Bounds()
 
 	// Report change to attached sync target if applicable.
 	if parser.syncTarget != nil {
-		parser.syncTarget.Teleport(parser.Pos)
+		parser.syncTarget.Teleport(parser.pos)
 	}
 
 	return parser
@@ -139,10 +144,10 @@ func (parser *Parser) Teleport(pos int) *Parser {
 
 // Get : Retrieve the token located at the current position.
 func (parser *Parser) Get() scanner.Token {
-	return parser.tokens[parser.Pos]
+	return parser.tokens[parser.pos]
 }
 
 // Derive : Clones the parser along with it's current state.
-func (parser Parser) Derive() Parser {
-	return parser
+func (parser *Parser) Derive() *Parser {
+	return &Parser{pos: parser.pos, tokens: parser.tokens}
 }

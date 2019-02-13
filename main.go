@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	const src = `fn hello () { hello := ; }`
+	const src = `fn hello () { hello : = ; }`
 
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
@@ -28,7 +28,7 @@ func main() {
 			return
 		}
 
-		fmt.Println("[ Token:", parser.Pos, "] ->", token.Value, "(", token.Kind, ")")
+		fmt.Println("[ Token:", parser.GetPos(), "] ->", token.Value, "(", token.Kind, ")")
 	}
 
 	var module = ir.NewModule()

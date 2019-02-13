@@ -93,11 +93,11 @@ func (gen *CodeGenerator) functionArgs() {
 	derived := gen.Parser.Derive()
 
 	// Sync derived parser's position with original parser.
-	derived.Sync(gen.Parser)
+	derived.Link(gen.Parser)
 
 	for token := derived.Get(); token.Kind != scanner.TokenKindParenEnd; token = derived.Next() {
 		// TODO: Debugging.
-		fmt.Println("Parsing args ... Pos", derived.Pos)
+		fmt.Println("Parsing args ... Pos", derived.GetPos())
 
 		// TODO: Need to process args.
 		if derived.Peek().Kind == scanner.TokenKindEndOfFile {
@@ -148,9 +148,16 @@ func (gen *CodeGenerator) block() BlockAST {
 
 // TODO: Work on statement().
 func (gen *CodeGenerator) statement() BlockNode {
-	tokens := gen.Parser.Until(scanner.TokenKindSemiColon)
+	derived := gen.Parser.Derive()
+
+	// Sync original target.
+	derived.Link(gen.Parser)
+
+	tokens := derived.Until(scanner.TokenKindSemiColon)
 
 	fmt.Println(tokens)
+
+	fmt.Println("Currently at:", derived.Get())
 
 	if len(tokens) == 1 || len(tokens) == 1 { // Empty statement.
 		// TODO
@@ -162,22 +169,12 @@ func (gen *CodeGenerator) statement() BlockNode {
 	for i := 0; i < len(tokens); i++ {
 		token := tokens[i]
 
-		// TODO: Debugging.
-		fmt.Println("Cycle ... ", i)
-
 		if token.Kind == scanner.TokenKindIdentifier && i == 0 { // Variable declaration, assignment, or call.
-			if IsVariableDeclaration(gen.Parser) { // Variable declaration.
-				// TODO: Debugging, left here.
+			if IsVariableDeclaration(derived) { // Variable declaration.
 				fmt.Println("Variable declaration found!")
 			}
-
-			// TODO: Debugging.
-			fmt.Println("--> Is identifier")
 		} else {
-			// TODO: Debugging.
-			fmt.Println("Fail at was", token.Kind)
-
-			gen.Parser.Fatal("Expecting statement containing valid expression(s)")
+			derived.Fatal("Expecting statement containing valid expression(s)")
 		}
 	}
 
@@ -202,6 +199,8 @@ func (gen *CodeGenerator) identifier() IdentifierAST {
 
 // IsVariableDeclaration : Determine if the upcoming sequence of tokens represents a variable declaration.
 func IsVariableDeclaration(parser *parser.Parser) bool {
+	fmt.Println("peek", parser.Peek(), "peekX", parser.PeekX(2))
+
 	// TODO: 4 should be 2, pos isn't carrying over at the point being called in statement().
-	return parser.Peek().Kind == scanner.TokenKindColon && parser.PeekX(4).Kind == scanner.TokenKindEqualSign
+	return parser.Peek().Kind == scanner.TokenKindColon && parser.PeekX(2).Kind == scanner.TokenKindEqualSign
 }
