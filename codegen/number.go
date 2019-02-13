@@ -10,6 +10,6 @@ type NumberAST struct {
 	value int64
 }
 
-func (number NumberAST) get() *constant.Int {
-	return constant.NewInt(types.I32, number.value)
+func (node NumberAST) get() *constant.Int {
+	return constant.NewInt(types.I32, node.value)
 }

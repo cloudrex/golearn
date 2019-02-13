@@ -40,7 +40,7 @@ func (parser *Parser) Consume() *Parser {
 
 // Err : Creates an error with parser metadata.
 func (parser *Parser) Err(message string) error {
-	return fmt.Errorf("[At token position %v] %v", parser.pos, message)
+	return fmt.Errorf("[At token position %v | kind %v | value '%v'] %v", parser.pos, parser.Get().Kind, parser.Get().Value, message)
 }
 
 // Fatal : Creates and displays a fatal error with parser metadata. Stops the application.
@@ -66,11 +66,14 @@ func (parser *Parser) PeekX(pos int) scanner.Token {
 
 // PeekUntil : Traverse the token list until the specified token kind is found without changing parser's position.
 func (parser *Parser) PeekUntil(kind scanner.TokenKind) []scanner.Token {
+	// Derive the parser to avoid modifying it's position.
+	derived := parser.Derive()
+
 	var tokens []scanner.Token
 
-	for token := parser.Get(); token.Kind != kind; token = parser.Next() {
+	for token := derived.Get(); token.Kind != kind; token = derived.Next() {
 		if token.Kind == scanner.TokenKindEndOfFile {
-			parser.Fatal(fmt.Sprintf("Unexpected end of input tokens, expecting token kind: %v", kind))
+			derived.Fatal(fmt.Sprintf("Unexpected end of input tokens, expecting token kind: %v", kind))
 		}
 
 		tokens = append(tokens, token)

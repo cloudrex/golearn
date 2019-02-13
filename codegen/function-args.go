@@ -11,6 +11,6 @@ type FunctionArgAST struct {
 	valueType types.Type
 }
 
-func (arg FunctionArgAST) get() *ir.Param {
-	return ir.NewParam(arg.name, arg.valueType)
+func (node FunctionArgAST) get() *ir.Param {
+	return ir.NewParam(node.name, node.valueType)
 }
