@@ -24,6 +24,11 @@ type ModuleNode interface {
 	Create(module *ir.Module)
 }
 
+// FuncNode : Base interface for an AST function node.
+type FuncNode interface {
+	Create(fn *ir.Func)
+}
+
 // IdentifierAST : Represents the identifier AST node.
 type IdentifierAST struct {
 	name string
@@ -34,32 +39,15 @@ type ExpressionAST struct {
 	tokens []scanner.Token
 }
 
-// BlockAST : Represents a statement block AST node.
-type BlockAST struct {
-	label      string
-	statements []BlockNode
-}
-
-// Create : Emit the AST representation.
-func (block *BlockAST) Create() *ir.Block {
-	irBlock := ir.NewBlock(block.label)
-
-	for i := 0; i < len(block.statements); i++ {
-		statement := block.statements[i]
-
-		statement.Create(irBlock)
-	}
-
-	return irBlock
-}
-
 // Function : Process and validate function.
-func (gen *CodeGenerator) Function() {
+func (gen *CodeGenerator) Function() FunctionAST {
+	var fn FunctionAST
+
 	// Must be followed by an identifier.
 	if gen.Parser.Peek().Kind != scanner.TokenKindIdentifier {
 		gen.Parser.Fatal("Expecting identifier after function definition keyword")
 
-		return
+		return fn
 	}
 
 	// Consume identifier.
@@ -68,11 +56,11 @@ func (gen *CodeGenerator) Function() {
 	if token.Kind != scanner.TokenKindParenStart {
 		gen.Parser.Fatal("Expecting argument list after function identifier: '('")
 
-		return
+		return fn
 	}
 
-	// Invoke function argument parser.
-	gen.functionArgs()
+	// Invoke function argument parser and apply.
+	fn.args = gen.functionArgs()
 
 	// Verify block start is present after argument list.
 	token = gen.Parser.Peek()
@@ -86,11 +74,13 @@ func (gen *CodeGenerator) Function() {
 	}
 
 	// Invoke block parser.
-	gen.block()
+	fn.body = gen.block()
+
+	return fn
 }
 
 // Process and validate function arguments.
-func (gen *CodeGenerator) functionArgs() {
+func (gen *CodeGenerator) functionArgs() []FunctionArgAST {
 	derived := gen.Parser.Derive()
 
 	// Sync derived parser's position with original parser.
@@ -105,6 +95,11 @@ func (gen *CodeGenerator) functionArgs() {
 			derived.Fatal("Expecting end of function argument list: ')'")
 		}
 	}
+
+	// TODO: Does this modify anything/cause any action?
+
+	// TODO: Returning empty for future implementation.
+	return []FunctionArgAST{}
 }
 
 // Save the current parser and apply a new parser.
@@ -123,13 +118,13 @@ func (gen *CodeGenerator) revertParser() *CodeGenerator {
 }
 
 // Process and validate a statement block.
-func (gen *CodeGenerator) block() BlockAST {
+func (gen *CodeGenerator) block() *BlockAST {
 	token := gen.Parser.Next()
 
 	if token.Kind != scanner.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
 	} else if gen.Parser.Peek().Kind == scanner.TokenKindBlockEnd { // Empty block.
-		return BlockAST{label: "anonymous_block"}
+		return &BlockAST{label: "anonymous_block"}
 	}
 
 	// Consume block start '{'.
@@ -144,12 +139,13 @@ func (gen *CodeGenerator) block() BlockAST {
 			gen.Parser.Fatal("Expecting block end: '}'")
 		}
 
-		fmt.Println("--- LOPPER, cur token is", token, "parser pos:", gen.Parser.GetPos())
+		// TODO: Debugging.
+		fmt.Println("--- LOOPER, cur token is", token, "parser pos:", gen.Parser.GetPos())
 
 		statements = append(statements, *gen.statement())
 	}
 
-	return BlockAST{label: "anonymous_block", statements: statements}
+	return &BlockAST{label: "anonymous_block", statements: statements}
 }
 
 // TODO: Work on statement().
