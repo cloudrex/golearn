@@ -127,40 +127,58 @@ func (gen *CodeGenerator) block() BlockAST {
 
 	if token.Kind != scanner.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
+	} else if gen.Parser.Peek().Kind == scanner.TokenKindBlockEnd { // Empty block.
+		return BlockAST{label: "anonymous_block"}
 	}
 
-	// Collect in-between tokens until the end of the block.
-	tokens := gen.Parser.Until(scanner.TokenKindBlockEnd)
-
-	// Create and apply a termporal new parser for local use.
-	parser := parser.NewParser(tokens)
-
-	gen.applyParser(parser)
+	// Consume block start '{'.
+	gen.Parser.Consume()
 
 	var statements []BlockNode
 
-	// TODO.
-	for i := 0; i < len(tokens); i++ {
-		statements = append(statements, gen.statement())
+	// Statement call will consume all statement tokens until the semi-colon; We can safely loop/continue.
+	for token = gen.Parser.Get(); token.Kind != scanner.TokenKindBlockEnd; statements = append(statements, gen.statement()) {
+		if token.Kind == scanner.TokenKindEndOfFile {
+			gen.Parser.Fatal("Expecting block end: '}'")
+		}
 	}
-
-	gen.revertParser()
 
 	return BlockAST{label: "anonymous_block", statements: statements}
 }
 
+// TODO: Work on statement().
 func (gen *CodeGenerator) statement() BlockNode {
 	tokens := gen.Parser.Until(scanner.TokenKindSemiColon)
 
+	fmt.Println(tokens)
+
 	if len(tokens) == 1 || len(tokens) == 1 { // Empty statement.
-		// TODO.
+		// TODO
 	}
 
 	var node BlockNode
 
 	// Validate captured tokens.
 	for i := 0; i < len(tokens); i++ {
-		// TODO.
+		token := tokens[i]
+
+		// TODO: Debugging.
+		fmt.Println("Cycle ... ", i)
+
+		if token.Kind == scanner.TokenKindIdentifier && i == 0 { // Variable declaration, assignment, or call.
+			if IsVariableDeclaration(gen.Parser) { // Variable declaration.
+				// TODO: Debugging, left here.
+				fmt.Println("Variable declaration found!")
+			}
+
+			// TODO: Debugging.
+			fmt.Println("--> Is identifier")
+		} else {
+			// TODO: Debugging.
+			fmt.Println("Fail at was", token.Kind)
+
+			gen.Parser.Fatal("Expecting statement containing valid expression(s)")
+		}
 	}
 
 	return node
@@ -180,4 +198,10 @@ func (gen *CodeGenerator) identifier() IdentifierAST {
 	}
 
 	return IdentifierAST{name: token.Value}
+}
+
+// IsVariableDeclaration : Determine if the upcoming sequence of tokens represents a variable declaration.
+func IsVariableDeclaration(parser *parser.Parser) bool {
+	// TODO: 4 should be 2, pos isn't carrying over at the point being called in statement().
+	return parser.Peek().Kind == scanner.TokenKindColon && parser.PeekX(4).Kind == scanner.TokenKindEqualSign
 }

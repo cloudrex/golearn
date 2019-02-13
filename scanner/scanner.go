@@ -47,6 +47,10 @@ func (sc *Scanner) Scan(input string) []Token {
 			token = TokenKindBlockEnd
 		} else if text == ";" { // Semi-colon ';'.
 			token = TokenKindSemiColon
+		} else if text == ":" { // Colon ':'.
+			token = TokenKindColon
+		} else if text == "=" { // Equal sign '='.
+			token = TokenKindEqualSign
 		}
 
 		tokens = append(tokens, Token{token, text})

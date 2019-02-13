@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"golearn/scanner"
+	"math"
 )
 
 // Parser : Handles parsing and breaking down code into nodes.
@@ -44,11 +45,18 @@ func (parser *Parser) Fatal(message string) {
 
 // Peek : Retrieve the next token in the list without changing the parser's position.
 func (parser *Parser) Peek() scanner.Token {
-	if parser.Pos >= len(parser.tokens) {
+	return parser.PeekX(1)
+}
+
+// PeekX : Retrieve the X token in the list without changing the parser's position.
+func (parser *Parser) PeekX(pos int) scanner.Token {
+	absPos := int(math.Abs(float64(pos)))
+
+	if parser.Pos+absPos >= len(parser.tokens) {
 		return scanner.Token{Kind: scanner.TokenKindEndOfFile}
 	}
 
-	return parser.tokens[parser.Pos+1]
+	return parser.tokens[parser.Pos+absPos]
 }
 
 // PeekUntil : Traverse the token list until the specified token kind is found without changing parser's position.

@@ -45,4 +45,10 @@ const (
 
 	// TokenKindSemiColon : Represents the semi-colon token ';'.
 	TokenKindSemiColon TokenKind = 10
+
+	// TokenKindEqualSign : Represents the equal sign token '='.
+	TokenKindEqualSign TokenKind = 11
+
+	// TokenKindColon : Represents the colon token ':'.
+	TokenKindColon TokenKind = 12
 )
