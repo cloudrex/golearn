@@ -8,24 +8,26 @@ import (
 
 // FunctionAST : Represents the function node.
 type FunctionAST struct {
-	Name       string
+	name       string
 	args       []FunctionArgAST
 	returnType types.Type
-	body       *BlockAST
+	body       *FunctionBodyAST
 }
 
+// TODO: This is just here for reference purposes, can be safely removed. (OldCreate)
+
 // OldCreate : Create and apply the function into an LLVM module.
-func (fn *FunctionAST) OldCreate(module *ir.Module) {
+func (node *FunctionAST) OldCreate(module *ir.Module) {
 	var args []*ir.Param
 
-	for i := 0; i < len(fn.args); i++ {
-		args[i] = fn.args[i].get()
+	for i := 0; i < len(node.args); i++ {
+		args[i] = node.args[i].get()
 	}
 
-	llvmFn := module.NewFunc(fn.Name, fn.returnType, args...)
+	fn := module.NewFunc(node.name, node.returnType, args...)
 
 	// Add the body block.
-	block := llvmFn.NewBlock("body")
+	block := fn.NewBlock("body")
 
 	// Test add addition statement.
 	addSt := block.NewAdd(constant.NewInt(types.I32, 5), constant.NewInt(types.I32, 5))
@@ -34,15 +36,15 @@ func (fn *FunctionAST) OldCreate(module *ir.Module) {
 }
 
 // Emit : Emit the AST representation.
-func (fn *FunctionAST) Emit(module *ir.Module) {
+func (node *FunctionAST) Emit(module *ir.Module) {
 	var args []*ir.Param
 
-	for i := 0; i < len(fn.args); i++ {
-		args[i] = fn.args[i].get()
+	for i := 0; i < len(node.args); i++ {
+		args[i] = node.args[i].get()
 	}
 
-	llvmFn := module.NewFunc(fn.Name, fn.returnType, args...)
+	fn := module.NewFunc(node.name, node.returnType, args...)
 
 	// Emit the function body.
-	fn.body.Emit(llvmFn)
+	node.body.Emit(fn)
 }

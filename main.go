@@ -36,4 +36,7 @@ func main() {
 
 		fmt.Println("[ Token:", parser.GetPos(), "] ->", token.Value, "(", token.Kind, ")")
 	}
+
+	fmt.Println("\n--- LLVM IR ---")
+	fmt.Println(module)
 }

@@ -118,13 +118,13 @@ func (gen *CodeGenerator) revertParser() *CodeGenerator {
 }
 
 // Process and validate a statement block.
-func (gen *CodeGenerator) block() *BlockAST {
+func (gen *CodeGenerator) block() *FunctionBodyAST {
 	token := gen.Parser.Next()
 
 	if token.Kind != scanner.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
 	} else if gen.Parser.Peek().Kind == scanner.TokenKindBlockEnd { // Empty block.
-		return &BlockAST{label: "anonymous_block"}
+		return &FunctionBodyAST{label: "anonymous_block"}
 	}
 
 	// Consume block start '{'.
@@ -145,7 +145,7 @@ func (gen *CodeGenerator) block() *BlockAST {
 		statements = append(statements, *gen.statement())
 	}
 
-	return &BlockAST{label: "anonymous_block", statements: statements}
+	return &FunctionBodyAST{label: "anonymous_block", statements: statements}
 }
 
 // TODO: Work on statement().
