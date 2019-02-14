@@ -1,8 +1,6 @@
 package codegen
 
 import (
-	"fmt"
-
 	"github.com/llir/llvm/ir"
 )
 
@@ -12,15 +10,13 @@ type BlockAST struct {
 	statements []BlockNode
 }
 
-// Create : Emit the AST representation.
-func (node *BlockAST) Create(fn *ir.Func) {
-	fmt.Println("--- STATEMENTS", node)
-
+// Emit : Emit the AST representation.
+func (node *BlockAST) Emit(fn *ir.Func) {
 	irBlock := fn.NewBlock(node.label)
 
 	for i := 0; i < len(node.statements); i++ {
 		statement := node.statements[i]
 
-		statement.Create(irBlock)
+		statement.Emit(irBlock)
 	}
 }

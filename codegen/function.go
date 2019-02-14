@@ -33,8 +33,8 @@ func (fn *FunctionAST) OldCreate(module *ir.Module) {
 	block.NewRet(addSt)
 }
 
-// Create : Emit the AST representation.
-func (fn *FunctionAST) Create(module *ir.Module) {
+// Emit : Emit the AST representation.
+func (fn *FunctionAST) Emit(module *ir.Module) {
 	var args []*ir.Param
 
 	for i := 0; i < len(fn.args); i++ {
@@ -44,5 +44,5 @@ func (fn *FunctionAST) Create(module *ir.Module) {
 	llvmFn := module.NewFunc(fn.Name, fn.returnType, args...)
 
 	// Emit the function body.
-	fn.body.Create(llvmFn)
+	fn.body.Emit(llvmFn)
 }

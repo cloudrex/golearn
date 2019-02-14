@@ -16,17 +16,17 @@ type CodeGenerator struct {
 
 // BlockNode : Base interface for an AST block node.
 type BlockNode interface {
-	Create(block *ir.Block)
+	Emit(block *ir.Block)
 }
 
 // ModuleNode : Base interface for an AST module node.
 type ModuleNode interface {
-	Create(module *ir.Module)
+	Emit(module *ir.Module)
 }
 
 // FuncNode : Base interface for an AST function node.
 type FuncNode interface {
-	Create(fn *ir.Func)
+	Emit(fn *ir.Func)
 }
 
 // IdentifierAST : Represents the identifier AST node.
@@ -188,7 +188,7 @@ func (gen *CodeGenerator) statement() *BlockNode {
 }
 
 func (gen *CodeGenerator) expression() ExpressionAST {
-	// TODO.
+	// TODO
 	panic("Not yet implemented")
 }
 

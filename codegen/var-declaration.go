@@ -21,8 +21,8 @@ func (node *VarDeclarationAST) GetValue() string {
 	return node.value
 }
 
-// Create : Emit the AST representation.
-func (node *VarDeclarationAST) Create(block *ir.Block) {
+// Emit : Emit the AST representation.
+func (node *VarDeclarationAST) Emit(block *ir.Block) {
 	alloc := block.NewAlloca(types.I32)
 
 	alloc.SetName(node.name)
