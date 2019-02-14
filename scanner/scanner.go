@@ -15,6 +15,11 @@ func IsIdentifier(input string) bool {
 	return regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$").MatchString(input)
 }
 
+// IsNumeric : Determine if input is a numeric decimal constant.
+func IsNumeric(input string) bool {
+	return regexp.MustCompile("^[0-9]*(?:\\.[0-9]+)?$").MatchString(input)
+}
+
 // Scan : Scan and break up input into lexical tokens.
 func (sc *Scanner) Scan(input string) []Token {
 	var scan scanner.Scanner
@@ -27,33 +32,35 @@ func (sc *Scanner) Scan(input string) []Token {
 	for tok := scan.Scan(); tok != scanner.EOF; tok = scan.Scan() {
 		// Recognize and append tokens accordingly as they come.
 		text := scan.TokenText()
-		token := TokenKindUnknown
+		kind := TokenKindUnknown
 
 		if text == "fn" { // Function definition keyword 'fn'.
-			token = TokenKindFn
+			kind = TokenKindFn
 		} else if text == "exit" { // Exit keyword 'exit'.
-			token = TokenKindExit
+			kind = TokenKindExit
 		} else if text == "+" { // Addition operator '+'.
-			token = TokenKindAddOp
+			kind = TokenKindAddOp
 		} else if IsIdentifier(text) { // Identifier.
-			token = TokenKindIdentifier
+			kind = TokenKindIdentifier
+		} else if IsNumeric(text) { // Numeric decimal constant.
+			kind = TokenKindNumber
 		} else if text == "(" { // Parentheses start '('.
-			token = TokenKindParenStart
+			kind = TokenKindParenStart
 		} else if text == ")" { // Parentheses end ')'.
-			token = TokenKindParenEnd
+			kind = TokenKindParenEnd
 		} else if text == "{" { // Block start '{'.
-			token = TokenKindBlockStart
+			kind = TokenKindBlockStart
 		} else if text == "}" { // Block end '{'.
-			token = TokenKindBlockEnd
+			kind = TokenKindBlockEnd
 		} else if text == ";" { // Semi-colon ';'.
-			token = TokenKindSemiColon
+			kind = TokenKindSemiColon
 		} else if text == ":" { // Colon ':'.
-			token = TokenKindColon
+			kind = TokenKindColon
 		} else if text == "=" { // Equal sign '='.
-			token = TokenKindEqualSign
+			kind = TokenKindEqualSign
 		}
 
-		tokens = append(tokens, Token{token, text})
+		tokens = append(tokens, Token{Kind: kind, Value: text})
 	}
 
 	return tokens

@@ -51,4 +51,7 @@ const (
 
 	// TokenKindColon : Represents the colon token ':'.
 	TokenKindColon TokenKind = 12
+
+	// TokenKindNumber : Represents the numeric constant token.
+	TokenKindNumber TokenKind = 13
 )

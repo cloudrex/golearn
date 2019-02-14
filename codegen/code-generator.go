@@ -4,6 +4,13 @@ import (
 	"fmt"
 	"golearn/parser"
 	"golearn/scanner"
+	"strconv"
+
+	"github.com/llir/llvm/ir/constant"
+
+	"github.com/llir/llvm/ir/value"
+
+	"github.com/llir/llvm/ir/types"
 
 	"github.com/llir/llvm/ir"
 )
@@ -180,8 +187,11 @@ func (gen *CodeGenerator) statement() *BlockNode {
 				node = &VarDeclarationAST{name: token.Value}
 
 				break
-			} else if IsAssignment(tokens) {
-				fmt.Println("Variable ASSIGNMENT found!")
+			} else if IsVariableAssignment(tokens) { // Variable assignment.
+				// Skip assignment sequence (2 tokens)
+				node = &VarAssignmentAST{value: gen.resolveValue(tokens[i+2])}
+
+				break
 			} else {
 				gen.Parser.Fatal("Expecting variable declaration, assignment, or call")
 			}
@@ -191,6 +201,27 @@ func (gen *CodeGenerator) statement() *BlockNode {
 	}
 
 	return &node
+}
+
+func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
+	var val value.Value
+
+	fmt.Println("resolve token:", token)
+
+	// TODO: Implement support for resolving identifiers, function calls and expressions.
+	if token.Kind == scanner.TokenKindNumber { // Numeric constant.
+		floatVal, err := strconv.ParseFloat(token.Value, 128)
+
+		if err != nil {
+			gen.Parser.Fatal("Failed to convert numeric constant to float")
+		}
+
+		val = constant.NewFloat(types.FP128, floatVal)
+	} else {
+		gen.Parser.Fatal("Expecting a numeric constant value")
+	}
+
+	return val
 }
 
 func (gen *CodeGenerator) expression() ExpressionAST {
@@ -209,8 +240,8 @@ func (gen *CodeGenerator) identifier() IdentifierAST {
 	return IdentifierAST{name: token.Value}
 }
 
-// IsAssignment : Determine if the provided sequence of tokens represent a variable assignment.
-func IsAssignment(sequence []scanner.Token) bool {
+// IsVariableAssignment : Determine if the provided sequence of tokens represent a variable assignment.
+func IsVariableAssignment(sequence []scanner.Token) bool {
 	parser := parser.NewParser(sequence)
 
 	return parser.Peek().Kind == scanner.TokenKindEqualSign
