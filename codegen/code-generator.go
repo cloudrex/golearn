@@ -188,7 +188,7 @@ func (gen *CodeGenerator) statement() *BlockNode {
 
 				break
 			} else if IsVariableAssignment(tokens) { // Variable assignment.
-				// Skip assignment sequence (2 tokens)
+				// Skip assignment sequence (2 tokens).
 				node = &VarAssignmentAST{value: gen.resolveValue(tokens[i+2])}
 
 				break
