@@ -34,7 +34,7 @@ func main() {
 			return
 		}
 
-		fmt.Println("[ Token:", parser.GetPos(), "] ->", token.Value, "(", token.Kind, ")")
+		fmt.Printf("[Token: %v] -> %v (%v)", parser.GetPos(), token.Value, token.Kind)
 	}
 
 	fmt.Println("\n--- LLVM IR ---")
