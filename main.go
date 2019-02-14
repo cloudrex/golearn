@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	const src = `fn hello () { hello : = ; }`
+	const src = `fn hello () { hello : = ; } fn another () { hello2 : =  ; hello3 : = 5; }`
 
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
@@ -37,6 +37,6 @@ func main() {
 		fmt.Printf("[Token: %v] -> %v (%v)", parser.GetPos(), token.Value, token.Kind)
 	}
 
-	fmt.Println("\n--- LLVM IR ---")
+	fmt.Println("\n\n--- LLVM IR ---\n")
 	fmt.Println(module)
 }

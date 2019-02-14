@@ -50,8 +50,14 @@ func (gen *CodeGenerator) Function() FunctionAST {
 		return fn
 	}
 
-	// Consume identifier.
-	token := gen.Parser.Consume().Next()
+	// Function identifier.
+	token := gen.Parser.Next()
+
+	// Assign function name.
+	fn.name = token.Value
+
+	// Continue to next token.
+	token = gen.Parser.Next()
 
 	if token.Kind != scanner.TokenKindParenStart {
 		gen.Parser.Fatal("Expecting argument list after function identifier: '('")
@@ -74,7 +80,7 @@ func (gen *CodeGenerator) Function() FunctionAST {
 	}
 
 	// Invoke block parser.
-	fn.body = gen.block()
+	fn.body = gen.functionBody()
 
 	return fn
 }
@@ -117,14 +123,14 @@ func (gen *CodeGenerator) revertParser() *CodeGenerator {
 	return gen
 }
 
-// Process and validate a statement block.
-func (gen *CodeGenerator) block() *FunctionBodyAST {
+// Process and validate a function statement blocks.
+func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 	token := gen.Parser.Next()
 
 	if token.Kind != scanner.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
 	} else if gen.Parser.Peek().Kind == scanner.TokenKindBlockEnd { // Empty block.
-		return &FunctionBodyAST{label: "anonymous_block"}
+		return &FunctionBodyAST{}
 	}
 
 	// Consume block start '{'.
@@ -145,7 +151,7 @@ func (gen *CodeGenerator) block() *FunctionBodyAST {
 		statements = append(statements, *gen.statement())
 	}
 
-	return &FunctionBodyAST{label: "anonymous_block", statements: statements}
+	return &FunctionBodyAST{statements: statements}
 }
 
 // TODO: Work on statement().
