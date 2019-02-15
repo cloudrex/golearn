@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	const src = `fn hello () { hello : = ; hello = 3.14 ; }`
+	const src = `fn hello () { hello : = ; hello = 3.14 ; } fn hello () { }`
 
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
