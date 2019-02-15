@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	const src = `fn hello () { hello : = ; hello = 3.14 ; } fn hello () { }`
+	const src = `fn main () { hello : = ; hello = 3.14 ; } fn _hello () { }`
+	const mainFnName = "main"
 
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
@@ -22,6 +23,9 @@ func main() {
 	// Create the code generator and attach parser + module.
 	generator := codegen.NewCodeGenerator(parser, module)
 
+	// Flag representing whether the main function was found.
+	mainFound := false
+
 	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
 		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.
 			// Invoke the function AST generator.
@@ -29,13 +33,23 @@ func main() {
 
 			// Emit the function.
 			fn.Emit(module)
+
+			// Ensure the main function is declared. No need for re-declaration check, as already handled elsewhere.
+			if fn.GetName() == mainFnName {
+				mainFound = true
+			}
 		} else if token.Kind == scanner.TokenKindUnknown { // Unknown token.
-			parser.Fatal("Unknown token")
+			parser.UnknownToken()
 
 			return
 		}
 
 		fmt.Printf("[Token: %v] -> %v (%v)", parser.GetPos(), token.Value, token.Kind)
+	}
+
+	// Ensure a main function was declared.
+	if !mainFound {
+		parser.NoMainFnFound()
 	}
 
 	fmt.Println("\n\n--- LLVM IR ---\n")

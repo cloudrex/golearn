@@ -14,6 +14,11 @@ type FunctionAST struct {
 	body       *FunctionBodyAST
 }
 
+// GetName : Retrieve the function node's name.
+func (node *FunctionAST) GetName() string {
+	return node.name
+}
+
 // TODO: This is just here for reference purposes, can be safely removed (OldCreate).
 
 // OldCreate : Create and apply the function into an LLVM module.

@@ -38,16 +38,6 @@ func (parser *Parser) Consume() *Parser {
 	return parser
 }
 
-// Err : Creates an error with parser metadata.
-func (parser *Parser) Err(message string) error {
-	return fmt.Errorf("[At token position %v | kind %v | value '%v'] %v", parser.pos, parser.Get().Kind, parser.Get().Value, message)
-}
-
-// Fatal : Creates and displays a fatal error with parser metadata. Stops the application.
-func (parser *Parser) Fatal(message string) {
-	panic(parser.Err(message))
-}
-
 // Peek : Retrieve the next token in the list without changing the parser's position.
 func (parser *Parser) Peek() scanner.Token {
 	return parser.PeekX(1)
