@@ -65,3 +65,29 @@ func (sc *Scanner) Scan(input string) []Token {
 
 	return tokens
 }
+
+// FindTokenIndex : Find a token's index location in a token array by it's kind. Returns matching first element found or '-1' if not found.
+func FindTokenIndex(set []Token, kind TokenKind) int {
+	index := -1
+
+	for i := 0; i < len(set); i++ {
+		if set[i].Kind == kind {
+			index = i
+
+			break
+		}
+	}
+
+	return index
+}
+
+// FindToken : Find a token in a token array by it's kind. Returns matching first element found or EOF token if not found.
+func FindToken(set []Token, kind TokenKind) Token {
+	index := FindTokenIndex(set, kind)
+
+	if index != -1 {
+		return set[index]
+	}
+
+	return Token{Kind: TokenKindEndOfFile}
+}
