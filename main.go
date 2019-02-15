@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
+	"golearn/codegen"
 	"golearn/parser"
 	"golearn/scanner"
 
 	"github.com/llir/llvm/ir"
-
-	"golearn/codegen"
 )
 
 func main() {
@@ -16,10 +15,12 @@ func main() {
 	var lexer = scanner.Scanner{}
 	var tokens = lexer.Scan(src)
 	var parser = parser.NewParser(tokens)
-	var generator = codegen.CodeGenerator{Parser: parser}
 
 	// Global LLVM module.
 	module := ir.NewModule()
+
+	// Create the code generator and attach parser + module.
+	generator := codegen.NewCodeGenerator(parser, module)
 
 	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
 		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.

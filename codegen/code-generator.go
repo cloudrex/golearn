@@ -17,8 +17,21 @@ import (
 
 // CodeGenerator : Represents the code generator.
 type CodeGenerator struct {
-	Parser        *parser.Parser
+	// TODO: Make 'Parser' private ('parser').
+	Parser *parser.Parser
+
 	stashedParser *parser.Parser
+	module        *ir.Module
+}
+
+// GetParser : Retrieve the code generator's parser.
+func (gen *CodeGenerator) GetParser() *parser.Parser {
+	return gen.Parser
+}
+
+// NewCodeGenerator : Create a new instance of the code generator module.
+func NewCodeGenerator(parser *parser.Parser, module *ir.Module) *CodeGenerator {
+	return &CodeGenerator{Parser: parser, module: module}
 }
 
 // BlockNode : Base interface for an AST block node.
@@ -59,6 +72,13 @@ func (gen *CodeGenerator) Function() FunctionAST {
 
 	// Function identifier.
 	token := gen.Parser.Next()
+
+	// Verify the function doesn't already exist.
+	for _, v := range gen.module.Funcs {
+		if v.Name() == token.Value {
+			gen.Parser.Fatal("Cannot re-define function. A function named '" + token.Value + "' is already defined")
+		}
+	}
 
 	// Assign function name.
 	fn.name = token.Value
