@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"golearn/parser"
 	"golearn/scanner"
-	"strconv"
 
 	"github.com/llir/llvm/ir/constant"
 
@@ -14,6 +13,8 @@ import (
 
 	"github.com/llir/llvm/ir"
 )
+
+var variableTypes = []string{"string", "float", "int"}
 
 // CodeGenerator : Represents the code generator.
 type CodeGenerator struct {
@@ -201,7 +202,7 @@ func (gen *CodeGenerator) statement() *BlockNode {
 		// TODO: Each section can be split, ex. parseVariableDeclaration(), parseAssignment(), etc.
 		if token.Kind == scanner.TokenKindIdentifier && i == 0 { // Variable declaration, assignment, or call.
 			if IsVariableDeclaration(tokens) { // Variable declaration.
-				node = &VarDeclarationAST{name: token.Value}
+				node = &VariableAST{name: token.Value}
 
 				break
 			} else if IsVariableAssignment(tokens) { // Variable assignment.
@@ -223,17 +224,25 @@ func (gen *CodeGenerator) statement() *BlockNode {
 func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
 	var val value.Value
 
-	fmt.Println("resolve token:", token)
-
 	// TODO: Implement support for resolving identifiers, function calls and expressions.
-	if token.Kind == scanner.TokenKindNumber { // Numeric constant.
-		floatVal, err := strconv.ParseFloat(token.Value, 128)
+	if token.Kind == scanner.TokenKindStringLiteral { // String literal.
+		val = constant.NewCharArrayFromString(token.Value)
+	} else if token.Kind == scanner.TokenKindIntegerLiteral { // Integer literal.
+		result, err := constant.NewIntFromString(types.I32, token.Value)
 
 		if err != nil {
-			gen.Parser.Fatal("Failed to convert numeric constant to float")
+			gen.Parser.Fatal("Failed to convert integer32 literal value from string")
 		}
 
-		val = constant.NewFloat(types.Float, floatVal)
+		val = result
+	} else if token.Kind == scanner.TokenKindFloatLiteral { // Float literal.
+		result, err := constant.NewFloatFromString(types.Float, token.Value)
+
+		if err != nil {
+			gen.Parser.Fatal("Failed to convert float literal value to float from string")
+		}
+
+		val = result
 	} else {
 		gen.Parser.Fatal("Expecting a numeric constant value")
 	}
@@ -268,5 +277,28 @@ func IsVariableAssignment(sequence []scanner.Token) bool {
 func IsVariableDeclaration(sequence []scanner.Token) bool {
 	parser := parser.NewParser(sequence)
 
-	return parser.Peek().Kind == scanner.TokenKindColon && parser.PeekX(2).Kind == scanner.TokenKindEqualSign
+	if IsTypeKeyword(parser.Get().Value) && parser.Next().Kind == scanner.TokenKindIdentifier {
+		peekKind := parser.Peek().Kind
+
+		if peekKind == scanner.TokenKindSemiColon { // Empty declaration.
+			return true
+		} else if peekKind == scanner.TokenKindEqualSign { // Declaration + assignment.
+			// TODO: Not checking after '='.
+
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsTypeKeyword : Determine if input is a variable type keyword.
+func IsTypeKeyword(input string) bool {
+	for i := 0; i < len(variableTypes); i++ {
+		if variableTypes[i] == input {
+			return true
+		}
+	}
+
+	return false
 }

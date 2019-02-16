@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	const src = `extern puts; fn main () { hello : = ; hello = 3.14 ; } fn _hello () { }`
+	const src = `extern puts; fn main () { hello : = ; hello = "hello world" ; } fn _hello () { }`
 	const mainFnName = "main"
 
 	var lexer = scanner.Scanner{}

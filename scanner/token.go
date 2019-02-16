@@ -52,6 +52,21 @@ const (
 	// TokenKindColon : Represents the colon token ':'.
 	TokenKindColon TokenKind = 12
 
-	// TokenKindNumber : Represents the numeric constant token.
-	TokenKindNumber TokenKind = 13
+	// TokenKindIntegerLiteral : Represents the integer literal value token.
+	TokenKindIntegerLiteral TokenKind = 13
+
+	// TokenKindFloatLiteral : Represents the float literal value token.
+	TokenKindFloatLiteral TokenKind = 14
+
+	// TokenKindStringLiteral : Represents the string literal value token.
+	TokenKindStringLiteral TokenKind = 15
+
+	// TokenKindStringKeyword : Represents the string type keyword 'string'.
+	TokenKindStringKeyword TokenKind = 16
+
+	// TokenKindIntKeyword : Represents the integer-32 short-hand type keyword 'int'.
+	TokenKindIntKeyword TokenKind = 17
+
+	// TokenKindFloatKeyword : Represents the float type keyword 'float'.
+	TokenKindFloatKeyword TokenKind = 18
 )

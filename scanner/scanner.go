@@ -8,6 +8,7 @@ import (
 
 // Scanner : Represents the lexical token scanner utility.
 type Scanner struct {
+	//
 }
 
 // IsIdentifier : Determine if input is an identifier token.
@@ -15,9 +16,19 @@ func IsIdentifier(input string) bool {
 	return regexp.MustCompile("^[_a-zA-Z][_a-zA-Z0-9]*$").MatchString(input)
 }
 
-// IsNumeric : Determine if input is a numeric decimal constant.
-func IsNumeric(input string) bool {
-	return regexp.MustCompile("^[0-9]*(?:\\.[0-9]+)?$").MatchString(input)
+// IsFloatLiteral : Determine if input is a numeric float literal.
+func IsFloatLiteral(input string) bool {
+	return regexp.MustCompile("^[0-9]+\\.[0-9]+$").MatchString(input)
+}
+
+// IsIntLiteral : Determine if input is a numeric integer literal.
+func IsIntLiteral(input string) bool {
+	return regexp.MustCompile("^[0-9]+$").MatchString(input)
+}
+
+// IsStringLiteral : Determine if input is a string literal.
+func IsStringLiteral(input string) bool {
+	return regexp.MustCompile("^\"[^\"]*\"$").MatchString(input)
 }
 
 // Scan : Scan and break up input into lexical tokens.
@@ -38,12 +49,22 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindFn
 		} else if text == "exit" { // Exit keyword 'exit'.
 			kind = TokenKindExit
+		} else if text == "string" { // String type keyword 'string'.
+			kind = TokenKindStringKeyword
+		} else if text == "int" { // Integer-32 short-hand type keyword 'int'.
+			kind = TokenKindIntKeyword
+		} else if text == "float" { // Float type keyword 'float'.
+			kind = TokenKindFloatKeyword
 		} else if text == "+" { // Addition operator '+'.
 			kind = TokenKindAddOp
 		} else if IsIdentifier(text) { // Identifier.
 			kind = TokenKindIdentifier
-		} else if IsNumeric(text) { // Numeric decimal constant.
-			kind = TokenKindNumber
+		} else if IsStringLiteral(text) { // String literal.
+			kind = TokenKindStringLiteral
+		} else if IsIntLiteral(text) { // Integer value literal.
+			kind = TokenKindIntegerLiteral
+		} else if IsFloatLiteral(text) { // Float value literal.
+			kind = TokenKindFloatLiteral
 		} else if text == "(" { // Parentheses start '('.
 			kind = TokenKindParenStart
 		} else if text == ")" { // Parentheses end ')'.

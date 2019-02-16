@@ -1,7 +1,10 @@
 package codegen
 
 import (
+	"golearn/scanner"
 	"golearn/util"
+
+	"github.com/llir/llvm/ir/types"
 
 	"github.com/llir/llvm/ir"
 	"github.com/llir/llvm/ir/value"
@@ -10,6 +13,7 @@ import (
 // VarAssignmentAST : Represents the variable assignment AST node.
 type VarAssignmentAST struct {
 	variableName string
+	variableType scanner.VariableType
 	value        value.Value
 }
 
@@ -31,6 +35,17 @@ func (node *VarAssignmentAST) Emit(block *ir.Block) {
 		// TODO: Should use Parser's Fatal error report function.
 		panic("Undeclared variable in assignment named '" + node.variableName + "'")
 	}
+
+	// Verify that types match.
+	if node.value.Type() == types.Float && node.variableType != scanner.VariableTypeFloat {
+		// TODO: Use Parser's Fatal method.
+		panic("Invalid assignment; Mismatching types; Expecting float value")
+	} else {
+		// TODO: Use Parser's Fatal method.
+		panic("Unexpected value type")
+	}
+
+	// TODO: Add more checks, else if... (int, string, etc.).
 
 	block.NewStore(node.value, target)
 }
