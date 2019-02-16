@@ -48,7 +48,8 @@ func (node *FunctionAST) Emit(module *ir.Module) {
 		args[i] = node.args[i].get()
 	}
 
-	fn := module.NewFunc(node.name, node.returnType, args...)
+	// TODO: Temporarily set function type to void. It should be 'node.returnType' but it's not assigned anywhere.
+	fn := module.NewFunc(node.name, types.Void, args...)
 
 	// Emit the function body.
 	node.body.Emit(fn)
