@@ -72,4 +72,10 @@ const (
 
 	// TokenKindExternKeyword : Represents the external definition keyword 'extern'.
 	TokenKindExternKeyword TokenKind = 19
+
+	// TokenKindCharKeyword : Represents the character type keyword 'char'.
+	TokenKindCharKeyword TokenKind = 20
+
+	// TokenKindCharLiteral : Represents the character literal value token.
+	TokenKindCharLiteral TokenKind = 21
 )

@@ -31,6 +31,11 @@ func IsStringLiteral(input string) bool {
 	return regexp.MustCompile("^\"[^\"]*\"$").MatchString(input)
 }
 
+// IsCharLiteral : Determine if input is a charater literal.
+func IsCharLiteral(input string) bool {
+	return regexp.MustCompile("^'[^\\']{0,1}'$").MatchString(input)
+}
+
 // Scan : Scan and break up input into lexical tokens.
 func (sc *Scanner) Scan(input string) []Token {
 	var scan scanner.Scanner
@@ -53,6 +58,8 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindExternKeyword
 		} else if text == "string" { // String type keyword 'string'.
 			kind = TokenKindStringKeyword
+		} else if text == "char" {
+			kind = TokenKindCharKeyword
 		} else if text == "int" { // Integer-32 short-hand type keyword 'int'.
 			kind = TokenKindIntKeyword
 		} else if text == "float" { // Float type keyword 'float'.
@@ -63,6 +70,8 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindIdentifier
 		} else if IsStringLiteral(text) { // String literal.
 			kind = TokenKindStringLiteral
+		} else if IsCharLiteral(text) { // Character literal.
+			kind = TokenKindCharLiteral
 		} else if IsIntLiteral(text) { // Integer value literal.
 			kind = TokenKindIntegerLiteral
 		} else if IsFloatLiteral(text) { // Float value literal.
