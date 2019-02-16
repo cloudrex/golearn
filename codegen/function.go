@@ -34,6 +34,7 @@ func (node *FunctionAST) OldCreate(module *ir.Module) {
 	// Add the body block.
 	block := fn.NewBlock("body")
 
+	// TODO: Just for debugging.
 	// Test add addition statement.
 	addSt := block.NewAdd(constant.NewInt(types.I32, 5), constant.NewInt(types.I32, 5))
 

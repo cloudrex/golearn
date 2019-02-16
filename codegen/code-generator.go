@@ -100,9 +100,6 @@ func (gen *CodeGenerator) Function() FunctionAST {
 
 	// Override block start error for more specific feedback (regarding a function).
 	if token.Kind != scanner.TokenKindBlockStart {
-		// TODO: Debugging statement.
-		fmt.Println("Type is", token)
-
 		gen.Parser.Fatal("Expecting statement block after function argument list: '{'")
 	}
 
@@ -208,8 +205,8 @@ func (gen *CodeGenerator) statement() *BlockNode {
 
 				break
 			} else if IsVariableAssignment(tokens) { // Variable assignment.
-				// Skip assignment sequence (2 tokens).
-				node = &VarAssignmentAST{value: gen.resolveValue(tokens[i+2])}
+				// Skip assignment sequence for value (2 tokens).
+				node = &VarAssignmentAST{variableName: "hello", value: gen.resolveValue(tokens[i+2])}
 
 				break
 			} else {

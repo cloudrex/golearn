@@ -29,8 +29,9 @@ func (node *VarDeclarationAST) GetRef() *ir.InstAlloca {
 
 // Emit : Emit the AST representation.
 func (node *VarDeclarationAST) Emit(block *ir.Block) {
-	ref := block.NewAlloca(types.I32)
+	ref := block.NewAlloca(types.Float)
 
+	// Apply variable name.
 	ref.SetName(node.name)
 
 	// Apply the ref to the node to allow future retrieval.

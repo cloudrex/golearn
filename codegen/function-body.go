@@ -13,7 +13,7 @@ type FunctionBodyAST struct {
 
 // Emit : Emit the AST representation.
 func (node *FunctionBodyAST) Emit(fn *ir.Func) {
-	block := fn.NewBlock("fn_body")
+	block := fn.NewBlock("entry")
 
 	for i := 0; i < len(node.statements); i++ {
 		statement := node.statements[i]
