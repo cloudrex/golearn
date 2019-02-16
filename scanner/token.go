@@ -69,4 +69,7 @@ const (
 
 	// TokenKindFloatKeyword : Represents the float type keyword 'float'.
 	TokenKindFloatKeyword TokenKind = 18
+
+	// TokenKindExternKeyword : Represents the external definition keyword 'extern'.
+	TokenKindExternKeyword TokenKind = 19
 )

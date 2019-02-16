@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	const src = `extern puts; fn main () { hello : = ; hello = "hello world" ; } fn _hello () { }`
+	const src = `fn main () { float pi ; pi = 3.14 ; pi = 2.1 ; float pi2 ; pi2 = 3.16 ; float pi3 = 3.17 ; } fn _4hello () { }`
 	const mainFnName = "main"
 
 	var lexer = scanner.Scanner{}

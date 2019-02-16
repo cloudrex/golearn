@@ -49,6 +49,8 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindFn
 		} else if text == "exit" { // Exit keyword 'exit'.
 			kind = TokenKindExit
+		} else if text == "extern" { // External definition keyword 'extern'.
+			kind = TokenKindExternKeyword
 		} else if text == "string" { // String type keyword 'string'.
 			kind = TokenKindStringKeyword
 		} else if text == "int" { // Integer-32 short-hand type keyword 'int'.

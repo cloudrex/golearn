@@ -54,7 +54,7 @@ func (parser *Parser) PeekX(pos int) scanner.Token {
 	return parser.tokens[parser.pos+absPos]
 }
 
-// PeekUntil : Traverse the token list until the specified token kind is found without changing parser's position.
+// PeekUntil : Traverse the token list until the specified token kind is found without changing parser's position. Result includes target token.
 func (parser *Parser) PeekUntil(kind scanner.TokenKind) []scanner.Token {
 	// Derive the parser to avoid modifying it's position.
 	derived := parser.Derive()
@@ -68,6 +68,9 @@ func (parser *Parser) PeekUntil(kind scanner.TokenKind) []scanner.Token {
 
 		tokens = append(tokens, token)
 	}
+
+	// Include target in result list.
+	tokens = append(tokens, derived.Get())
 
 	return tokens
 }

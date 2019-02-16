@@ -170,9 +170,6 @@ func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 			gen.Parser.Fatal("Expecting block end: '}'")
 		}
 
-		// TODO: Debugging.
-		fmt.Println("--- LOOPER, cur token is", token, "parser pos:", gen.Parser.GetPos())
-
 		statements = append(statements, *gen.statement())
 	}
 
@@ -183,11 +180,8 @@ func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 func (gen *CodeGenerator) statement() *BlockNode {
 	tokens := gen.Parser.Until(scanner.TokenKindSemiColon)
 
-	// Consume statement semi-colon ';'.
-	gen.Parser.Consume()
-
 	// TODO: Debugging.
-	fmt.Println(tokens)
+	fmt.Println("Statement parser tokens:", tokens)
 
 	if len(tokens) == 1 || len(tokens) == 1 { // Empty statement.
 		// TODO
@@ -200,19 +194,31 @@ func (gen *CodeGenerator) statement() *BlockNode {
 		token := tokens[i]
 
 		// TODO: Each section can be split, ex. parseVariableDeclaration(), parseAssignment(), etc.
-		if token.Kind == scanner.TokenKindIdentifier && i == 0 { // Variable declaration, assignment, or call.
-			if IsVariableDeclaration(tokens) { // Variable declaration.
-				node = &VariableAST{name: token.Value}
+		if IsTypeKeyword(token.Value) && i == 0 { // Variable declaration.
+			if IsVariableDeclaration(tokens) {
+				// TODO: CRITICAL: tokens[i+1] and tokens[i+3] have not been verified as existing and correct by IsVariableDeclaration(). Cannot be verified either because value can be an expression, and expressions can consist of tokens 1+ (IsVariableDeclaration cannot handle).
+				name := tokens[i+1].Value
+				varNode := &VariableAST{name: name}
 
-				break
-			} else if IsVariableAssignment(tokens) { // Variable assignment.
-				// Skip assignment sequence for value (2 tokens).
-				node = &VarAssignmentAST{variableName: "hello", value: gen.resolveValue(tokens[i+2])}
+				// Declaration sequence consists of 3 tokens.
+				if len(tokens) > i+3 { // Declaration is not empty.
+					varNode.Value = gen.resolveValue(tokens[i+3])
+				}
+
+				node = varNode
 
 				break
 			} else {
-				gen.Parser.Fatal("Expecting variable declaration, assignment, or call")
+				gen.Parser.Fatal("Expecting valid variable declaration sequence")
 			}
+		} else if token.Kind == scanner.TokenKindIdentifier && IsVariableAssignment(tokens) { // Variable assignment.
+			// Skip assignment sequence for value (2 tokens).
+			// TODO: CRITICAL: variableType is hard-coded to float. Way to determine var type needed.
+			node = &VarAssignmentAST{variableName: token.Value, value: gen.resolveValue(tokens[i+2]), variableType: scanner.VariableTypeFloat}
+
+			break
+		} else if token.Kind == scanner.TokenKindSemiColon { // Ignore semi-colons.
+			continue
 		} else {
 			gen.Parser.Fatal("Expecting statement containing valid expression(s)")
 		}
@@ -244,7 +250,7 @@ func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
 
 		val = result
 	} else {
-		gen.Parser.Fatal("Expecting a numeric constant value")
+		gen.Parser.Fatal("Expecting a numeric literal value")
 	}
 
 	return val

@@ -8,10 +8,12 @@ import (
 func FindAllocaInBlock(block *ir.Block, name string) *ir.InstAlloca {
 	var target *ir.InstAlloca
 
-	for i := 0; i < len(block.Insts); i++ {
-		inst := block.Insts[i].(*ir.InstAlloca)
+	for _, v := range block.Insts {
+		inst, ok := v.(*ir.InstAlloca)
 
-		if inst.LocalIdent.Name() == name {
+		if !ok { // Conversion failed. Continue.
+			continue
+		} else if inst.LocalIdent.Name() == name {
 			target = inst
 
 			break

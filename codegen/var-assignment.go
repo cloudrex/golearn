@@ -1,6 +1,7 @@
 package codegen
 
 import (
+	"fmt"
 	"golearn/scanner"
 	"golearn/util"
 
@@ -36,13 +37,12 @@ func (node *VarAssignmentAST) Emit(block *ir.Block) {
 		panic("Undeclared variable in assignment named '" + node.variableName + "'")
 	}
 
+	fmt.Println("Validation: var type:", node.variableType)
+
 	// Verify that types match.
 	if node.value.Type() == types.Float && node.variableType != scanner.VariableTypeFloat {
 		// TODO: Use Parser's Fatal method.
 		panic("Invalid assignment; Mismatching types; Expecting float value")
-	} else {
-		// TODO: Use Parser's Fatal method.
-		panic("Unexpected value type")
 	}
 
 	// TODO: Add more checks, else if... (int, string, etc.).
