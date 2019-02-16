@@ -236,7 +236,7 @@ func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
 			gen.Parser.Fatal("Failed to convert numeric constant to float")
 		}
 
-		val = constant.NewFloat(types.FP128, floatVal)
+		val = constant.NewFloat(types.Float, floatVal)
 	} else {
 		gen.Parser.Fatal("Expecting a numeric constant value")
 	}
