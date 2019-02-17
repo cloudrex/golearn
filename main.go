@@ -27,7 +27,7 @@ func main() {
 	mainFound := false
 
 	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
-		if token.Kind == scanner.TokenKindFn { // Function declaration 'fn'.
+		if token.Kind == scanner.TokenKindFnKeyword { // Function declaration 'fn'.
 			// Invoke the function AST generator.
 			fn := generator.Function()
 

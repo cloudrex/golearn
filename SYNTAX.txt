@@ -1,0 +1,141 @@
+str_literal
+    : ^"[^\"]*"$
+    ;
+
+char_literal
+    : "^'[^\']{0,1}'$"
+    ;
+
+import
+    : 'import' str_literal ';'
+    ;
+
+id
+    : ^[_a-zA-Z]+[_a-zA-Z0-9]*$
+    ;
+
+op
+    : '+'
+    | '-'
+    | '*'
+    | '/'
+    | '%'
+    | 'and'
+    | 'or'
+    | 'xor'
+    | '!'
+    | '^'
+    ;
+
+expr
+    : id
+    | id op id
+    | expr op expr
+    | '(' expr ')'
+    ;
+
+type
+    : 'int'
+    | 'float'
+    | 'bool'
+    | 'string'
+    | 'char'
+    ;
+
+statement
+    : expr ';'
+    | type id ':=' expr ';'
+    ;
+
+block
+    : statement
+    | body
+    ;
+
+block
+    : '{' body '}'
+    | '{' %empty '}'
+    ;
+
+attr
+    : '@' id
+    ;
+
+fn
+    : 'fn' id '(' ')' block
+    | 'fn' modifier id '(' ')' block
+    | attr fn
+    ;
+
+for
+    : 'for' '(' expr ';' expr ';' expr ')' block
+    ;
+
+while
+    : 'while' '(' expr ')' block
+    ;
+
+do_while
+    : 'do' block 'while' '(' expr ')' ';'
+    ;
+
+if_head
+    : 'if' '(' expr ')' block
+    ;
+
+if
+    : if_head
+    | if_head else_if_loop
+    ;
+
+else_if_loop
+    : else_if
+    | else_if_loop
+    | else_if else_if_loop
+    | else_if_loop else
+    ;
+
+else_if
+    : 'else' 'if' '(' expr ')' block
+    ;
+
+else
+    : 'else' block
+    ;
+    
+class_block
+    : %empty
+    | fn
+    | fn class_block
+    ;
+
+modifier
+    : 'pub'
+    | 'inter'
+    | 'prot'
+    | 'priv'
+    ;
+
+constructor
+    : modifier id '(' ')' block
+    ;
+
+class
+    : 'class' id class_block
+    ;
+
+struct_block
+    : TODO
+    ;
+
+struct
+    : 'struct' id struct_block
+    ;
+
+interface
+    : TODO
+    ;
+
+namespace
+    : TODO
+    ;

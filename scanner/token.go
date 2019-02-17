@@ -16,13 +16,13 @@ const (
 	// TokenKindUnknown : Represents the unknown or invalid token.
 	TokenKindUnknown TokenKind = 0
 
-	// TokenKindFn : Represents the function definition keyword 'fn'.
-	TokenKindFn TokenKind = 1
+	// TokenKindFnKeyword : Represents the function definition keyword 'fn'.
+	TokenKindFnKeyword TokenKind = 1
 
-	// TokenKindExit : Represents the exit keyword 'exit'.
-	TokenKindExit TokenKind = 2
+	// TokenKindBreak : Represents the loop-break keyword 'break'.
+	TokenKindBreak TokenKind = 2
 
-	// TokenKindAddOp : Represents the addition operator '+'.
+	// TokenKindAddOp : Represents the binary addition operator '+'.
 	TokenKindAddOp TokenKind = 3
 
 	// TokenKindIdentifier : Represents an identifier.
@@ -78,4 +78,49 @@ const (
 
 	// TokenKindCharLiteral : Represents the character literal value token.
 	TokenKindCharLiteral TokenKind = 21
+
+	// TokenKindSubOp : Represents the binary substraction operator '-'.
+	TokenKindSubOp TokenKind = 22
+
+	// TokenKindMultOp : Represents the binary multiplication operator '*'.
+	TokenKindMultOp TokenKind = 23
+
+	// TokenKindDivOp : Represents the binary division operator '/'.
+	TokenKindDivOp TokenKind = 24
+
+	// TokenKindModulusOp : Represents the binary modulus operator '%'.
+	TokenKindModulusOp TokenKind = 25
+
+	// TokenKindGreaterThanOp : Represents the binary logical greater than operator '>'.
+	TokenKindGreaterThanOp TokenKind = 26
+
+	// TokenKindLessThanOp : Represents the binary logical less than operator '<'.
+	TokenKindLessThanOp TokenKind = 27
+
+	// TokenKindNotOp : Represents the unary logical NOT oerator '!'.
+	TokenKindNotOp TokenKind = 28
+
+	// TokenKindDereferenceOp : Represents the unary de-reference operator '&'
+	TokenKindDereferenceOp TokenKind = 29
+
+	// TokenKindAttribute : Represents the attribute prefix '@'.
+	TokenKindAttribute TokenKind = 30
+
+	// TokenKindAndOp : Represents the logical AND operator 'and'.
+	TokenKindAndOp TokenKind = 31
+
+	// TokenKindOrOp : Represents the logical OR operator 'or'.
+	TokenKindOrOp TokenKind = 32
+
+	// TokenKindXOrOp : Represents the logical XOR operator 'xor'.
+	TokenKindXOrOp TokenKind = 33
+
+	// TokenKindIfKeyword : Represents the if keyword 'if'.
+	TokenKindIfKeyword TokenKind = 34
+
+	// TokenKindElseKeyword : Represents the else keyword 'else'.
+	TokenKindElseKeyword TokenKind = 35
+
+	// TokenKindForKeyword : Represents the for-loop keyword 'for'.
+	TokenKindForKeyword TokenKind = 36
 )

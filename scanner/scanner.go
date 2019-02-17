@@ -28,7 +28,7 @@ func IsIntLiteral(input string) bool {
 
 // IsStringLiteral : Determine if input is a string literal.
 func IsStringLiteral(input string) bool {
-	return regexp.MustCompile("^\"[^\"]*\"$").MatchString(input)
+	return regexp.MustCompile("^\"[^\\\"]*\"$").MatchString(input)
 }
 
 // IsCharLiteral : Determine if input is a charater literal.
@@ -51,9 +51,9 @@ func (sc *Scanner) Scan(input string) []Token {
 		kind := TokenKindUnknown
 
 		if text == "fn" { // Function definition keyword 'fn'.
-			kind = TokenKindFn
+			kind = TokenKindFnKeyword
 		} else if text == "exit" { // Exit keyword 'exit'.
-			kind = TokenKindExit
+			kind = TokenKindBreak
 		} else if text == "extern" { // External definition keyword 'extern'.
 			kind = TokenKindExternKeyword
 		} else if text == "string" { // String type keyword 'string'.
@@ -66,6 +66,14 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindFloatKeyword
 		} else if text == "+" { // Addition operator '+'.
 			kind = TokenKindAddOp
+		} else if text == "-" { // Substraction operator '-'.
+			kind = TokenKindSubOp
+		} else if text == "*" { // Multiplication operator '*'.
+			kind = TokenKindMultOp
+		} else if text == "/" { // Division operator '/'.
+			kind = TokenKindDivOp
+		} else if text == "%" { // Modulos operator '%'.
+			kind = TokenKindModulusOp
 		} else if IsIdentifier(text) { // Identifier.
 			kind = TokenKindIdentifier
 		} else if IsStringLiteral(text) { // String literal.
@@ -90,6 +98,28 @@ func (sc *Scanner) Scan(input string) []Token {
 			kind = TokenKindColon
 		} else if text == "=" { // Equal sign '='.
 			kind = TokenKindEqualSign
+		} else if text == ">" {
+			kind = TokenKindGreaterThanOp
+		} else if text == "<" {
+			kind = TokenKindLessThanOp
+		} else if text == "!" {
+			kind = TokenKindNotOp
+		} else if text == "&" {
+			kind = TokenKindDereferenceOp
+		} else if text == "@" {
+			kind = TokenKindAttribute
+		} else if text == "and" {
+			kind = TokenKindAndOp
+		} else if text == "or" {
+			kind = TokenKindOrOp
+		} else if text == "xor" {
+			kind = TokenKindXOrOp
+		} else if text == "if" {
+			kind = TokenKindIfKeyword
+		} else if text == "else" {
+			kind = TokenKindElseKeyword
+		} else if text == "for" {
+			kind = TokenKindForKeyword
 		}
 
 		tokens = append(tokens, Token{Kind: kind, Value: text})
