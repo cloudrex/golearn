@@ -2,7 +2,7 @@ package link
 
 import (
 	"errors"
-	"golearn/scanner"
+	"golearn/lex"
 	"io/ioutil"
 	"os"
 	"path"
@@ -10,14 +10,14 @@ import (
 )
 
 // ResolveSourceTokens : Reads target file path and returns corresponding tokens.
-func ResolveSourceTokens(filePath ...string) ([]scanner.Token, error) {
+func ResolveSourceTokens(filePath ...string) ([]lex.Token, error) {
 	if !DoesFilePathExist(filePath...) {
 		return nil, errors.New("Provided file path does not exist")
 	}
 
 	source, err := ReadFile(filePath...)
 
-	return scanner.Tokenize(source), err
+	return lex.Tokenize(source), err
 }
 
 // GetExePath : Retrieve the executable's absolute path.
