@@ -49,13 +49,13 @@ func Tokenize(input string) []Token {
 			kind = TokenKindFnKeyword
 		} else if text == "exit" { // Exit keyword 'exit'.
 			kind = TokenKindBreak
-		} else if text == "extern" { // External definition keyword 'extern'.
+		} else if text == KeywordBreak { // External definition keyword 'extern'.
 			kind = TokenKindExternKeyword
-		} else if text == "string" { // String type keyword 'string'.
+		} else if text == KeywordExtern { // String type keyword 'string'.
 			kind = TokenKindStringKeyword
-		} else if text == "char" {
+		} else if text == KeywordChar {
 			kind = TokenKindCharKeyword
-		} else if text == "int" { // Integer-32 short-hand type keyword 'int'.
+		} else if text == KeywordInt { // Integer-32 short-hand type keyword 'int'.
 			kind = TokenKindIntKeyword
 		} else if text == "float" { // Float type keyword 'float'.
 			kind = TokenKindFloatKeyword
@@ -101,19 +101,19 @@ func Tokenize(input string) []Token {
 			kind = TokenKindNotOp
 		} else if text == "&" {
 			kind = TokenKindDereferenceOp
-		} else if text == "@" {
+		} else if text == OperatorAttribute {
 			kind = TokenKindAttribute
-		} else if text == "and" {
+		} else if text == OperatorAnd {
 			kind = TokenKindAndOp
-		} else if text == "or" {
+		} else if text == OperatorOr {
 			kind = TokenKindOrOp
-		} else if text == "xor" {
+		} else if text == OperatorXOr {
 			kind = TokenKindXOrOp
-		} else if text == "if" {
+		} else if text == KeywordIf {
 			kind = TokenKindIfKeyword
-		} else if text == "else" {
+		} else if text == KeywordElse {
 			kind = TokenKindElseKeyword
-		} else if text == "for" {
+		} else if text == KeywordFor {
 			kind = TokenKindForKeyword
 		}
 

@@ -5,22 +5,37 @@ type Entity = string
 
 const (
 	// KeywordIf : Represents the if keyword.
-	KeywordIf = "if"
+	KeywordIf Entity = "if"
 
 	// KeywordElse : Represents the else keyword.
-	KeywordElse = "else"
+	KeywordElse Entity = "else"
 
 	// KeywordFor : Represents for-loop keyword.
-	KeywordFor = "for"
+	KeywordFor Entity = "for"
 
 	// KeywordBreak : Represents the loop break keyword.
-	KeywordBreak = "break"
+	KeywordBreak Entity = "break"
 
 	// KeywordContinue : Represents the loop continue keyword.
-	KeywordContinue = "continue"
+	KeywordContinue Entity = "continue"
 
 	// KeywordFn : Represents the function definition keyword.
-	KeywordFn = "fn"
+	KeywordFn Entity = "fn"
+
+	// KeywordImport : Represents the import statement keyword.
+	KeywordImport Entity = "import"
+
+	// KeywordExtern : Represents the external function definition keyword.
+	KeywordExtern Entity = "extern"
+
+	// KeywordChar : Represents the character type keyword.
+	KeywordChar Entity = "char"
+
+	// KeywordInt : Represents the integer-32 type keyword.
+	KeywordInt Entity = "int"
+
+	// KeywordString : Represents the string type keyword.
+	KeywordString Entity = "string"
 )
 
 const (
@@ -50,4 +65,7 @@ const (
 
 	// OperatorExpontial : Represents the expontial operator.
 	OperatorExpontial = "^"
+
+	// OperatorAttribute : Represents the attribute operator.
+	OperatorAttribute = "@"
 )

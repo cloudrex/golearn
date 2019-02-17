@@ -18,7 +18,7 @@ var variableTypes = []string{"string", "float", "int"}
 
 // CodeGenerator : Represents the code generator.
 type CodeGenerator struct {
-	// TODO: Make 'Parser' private ('parser').
+	// TODO: Make 'Parser' private ('parser')?
 	Parser *parser.Parser
 
 	stashedParser *parser.Parser

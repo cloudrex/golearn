@@ -37,6 +37,8 @@ func main() {
 			if fn.GetName() == mainFnName {
 				mainFound = true
 			}
+		} else if token.Kind == lex.TokenKindImport { // Import statement.
+			
 		} else if token.Kind == lex.TokenKindUnknown { // Unknown token.
 			parser.UnknownToken()
 

@@ -123,4 +123,7 @@ const (
 
 	// TokenKindForKeyword : Represents the for-loop keyword 'for'.
 	TokenKindForKeyword TokenKind = 36
+
+	// TokenKindImportKeyword : Represents the import statement keyword 'import'.
+	TokenKindImportKeyword TokenKind = 37
 )
