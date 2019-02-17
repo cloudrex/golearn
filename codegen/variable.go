@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"golearn/scanner"
+	"golearn/lex"
 	"golearn/util"
 
 	"github.com/llir/llvm/ir/value"
@@ -13,7 +13,7 @@ import (
 // VariableAST : Represents the variable AST node.
 type VariableAST struct {
 	name  string
-	kind  scanner.VariableType
+	kind  lex.VariableType
 	Value value.Value
 	ref   *ir.InstAlloca
 }

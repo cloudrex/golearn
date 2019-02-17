@@ -1,4 +1,4 @@
-package scanner
+package lex
 
 // Token : Represents a single token.
 type Token struct {

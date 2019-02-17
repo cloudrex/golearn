@@ -1,4 +1,4 @@
-package scanner
+package lex
 
 // VariableType : Reresents the various different types of values.
 type VariableType int

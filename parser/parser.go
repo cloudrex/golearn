@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-	"golearn/scanner"
+	scanner "golearn/lex"
 	"math"
 )
 

@@ -2,7 +2,7 @@ package codegen
 
 import (
 	"fmt"
-	"golearn/scanner"
+	"golearn/lex"
 	"golearn/util"
 
 	"github.com/llir/llvm/ir/types"
@@ -14,7 +14,7 @@ import (
 // VarAssignmentAST : Represents the variable assignment AST node.
 type VarAssignmentAST struct {
 	variableName string
-	variableType scanner.VariableType
+	variableType lex.VariableType
 	value        value.Value
 }
 
@@ -40,7 +40,7 @@ func (node *VarAssignmentAST) Emit(block *ir.Block) {
 	fmt.Println("Validation: var type:", node.variableType)
 
 	// Verify that types match.
-	if node.value.Type() == types.Float && node.variableType != scanner.VariableTypeFloat {
+	if node.value.Type() == types.Float && node.variableType != lex.VariableTypeFloat {
 		// TODO: Use Parser's Fatal method.
 		panic("Invalid assignment; Mismatching types; Expecting float value")
 	}

@@ -2,8 +2,8 @@ package codegen
 
 import (
 	"fmt"
+	"golearn/lex"
 	"golearn/parser"
-	"golearn/scanner"
 
 	"github.com/llir/llvm/ir/constant"
 
@@ -57,7 +57,7 @@ type IdentifierAST struct {
 
 // ExpressionAST : Represents an expression AST node.
 type ExpressionAST struct {
-	tokens []scanner.Token
+	tokens []lex.Token
 }
 
 // Function : Process and validate function.
@@ -65,7 +65,7 @@ func (gen *CodeGenerator) Function() FunctionAST {
 	var fn FunctionAST
 
 	// Must be followed by an identifier.
-	if gen.Parser.Peek().Kind != scanner.TokenKindIdentifier {
+	if gen.Parser.Peek().Kind != lex.TokenKindIdentifier {
 		gen.Parser.Fatal("Expecting identifier after function definition keyword")
 
 		return fn
@@ -87,7 +87,7 @@ func (gen *CodeGenerator) Function() FunctionAST {
 	// Continue to next token.
 	token = gen.Parser.Next()
 
-	if token.Kind != scanner.TokenKindParenStart {
+	if token.Kind != lex.TokenKindParenStart {
 		gen.Parser.Fatal("Expecting argument list after function identifier: '('")
 
 		return fn
@@ -100,7 +100,7 @@ func (gen *CodeGenerator) Function() FunctionAST {
 	token = gen.Parser.Peek()
 
 	// Override block start error for more specific feedback (regarding a function).
-	if token.Kind != scanner.TokenKindBlockStart {
+	if token.Kind != lex.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting statement block after function argument list: '{'")
 	}
 
@@ -117,12 +117,12 @@ func (gen *CodeGenerator) functionArgs() []FunctionArgAST {
 	// Sync derived parser's position with original parser.
 	derived.Link(gen.Parser)
 
-	for token := derived.Get(); token.Kind != scanner.TokenKindParenEnd; token = derived.Next() {
+	for token := derived.Get(); token.Kind != lex.TokenKindParenEnd; token = derived.Next() {
 		// TODO: Debugging.
 		fmt.Println("Parsing args ... Pos", derived.GetPos())
 
 		// TODO: Need to process args.
-		if derived.Peek().Kind == scanner.TokenKindEndOfFile {
+		if derived.Peek().Kind == lex.TokenKindEndOfFile {
 			derived.Fatal("Expecting end of function argument list: ')'")
 		}
 	}
@@ -152,9 +152,9 @@ func (gen *CodeGenerator) revertParser() *CodeGenerator {
 func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 	token := gen.Parser.Next()
 
-	if token.Kind != scanner.TokenKindBlockStart {
+	if token.Kind != lex.TokenKindBlockStart {
 		gen.Parser.Fatal("Expecting block start: '{'")
-	} else if gen.Parser.Peek().Kind == scanner.TokenKindBlockEnd { // Empty block.
+	} else if gen.Parser.Peek().Kind == lex.TokenKindBlockEnd { // Empty block.
 		return &FunctionBodyAST{}
 	}
 
@@ -164,9 +164,9 @@ func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 	var statements []BlockNode
 
 	// Statement parse call will consume all statement tokens until the semi-colon; We can safely loop/continue without acquiring next token(s).
-	for token = gen.Parser.Get(); token.Kind != scanner.TokenKindBlockEnd; token = gen.Parser.Get() {
+	for token = gen.Parser.Get(); token.Kind != lex.TokenKindBlockEnd; token = gen.Parser.Get() {
 		// Ensure parser doesn't reach end of file when expecting end of block token.
-		if token.Kind == scanner.TokenKindEndOfFile {
+		if token.Kind == lex.TokenKindEndOfFile {
 			gen.Parser.Fatal("Expecting block end: '}'")
 		}
 
@@ -178,7 +178,7 @@ func (gen *CodeGenerator) functionBody() *FunctionBodyAST {
 
 // TODO: Work on statement().
 func (gen *CodeGenerator) statement() *BlockNode {
-	tokens := gen.Parser.Until(scanner.TokenKindSemiColon)
+	tokens := gen.Parser.Until(lex.TokenKindSemiColon)
 
 	// TODO: Debugging.
 	fmt.Println("Statement parser tokens:", tokens)
@@ -211,13 +211,13 @@ func (gen *CodeGenerator) statement() *BlockNode {
 			} else {
 				gen.Parser.Fatal("Expecting valid variable declaration sequence")
 			}
-		} else if token.Kind == scanner.TokenKindIdentifier && IsVariableAssignment(tokens) { // Variable assignment.
+		} else if token.Kind == lex.TokenKindIdentifier && IsVariableAssignment(tokens) { // Variable assignment.
 			// Skip assignment sequence for value (2 tokens).
 			// TODO: CRITICAL: variableType is hard-coded to float. Way to determine var type needed.
-			node = &VarAssignmentAST{variableName: token.Value, value: gen.resolveValue(tokens[i+2]), variableType: scanner.VariableTypeFloat}
+			node = &VarAssignmentAST{variableName: token.Value, value: gen.resolveValue(tokens[i+2]), variableType: lex.VariableTypeFloat}
 
 			break
-		} else if token.Kind == scanner.TokenKindSemiColon { // Ignore semi-colons.
+		} else if token.Kind == lex.TokenKindSemiColon { // Ignore semi-colons.
 			continue
 		} else {
 			gen.Parser.Fatal("Expecting statement containing valid expression(s)")
@@ -227,13 +227,13 @@ func (gen *CodeGenerator) statement() *BlockNode {
 	return &node
 }
 
-func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
+func (gen *CodeGenerator) resolveValue(token lex.Token) value.Value {
 	var val value.Value
 
 	// TODO: Implement support for resolving identifiers, function calls and expressions.
-	if token.Kind == scanner.TokenKindStringLiteral { // String literal.
+	if token.Kind == lex.TokenKindStringLiteral { // String literal.
 		val = constant.NewCharArrayFromString(token.Value)
-	} else if token.Kind == scanner.TokenKindIntegerLiteral { // Integer literal.
+	} else if token.Kind == lex.TokenKindIntegerLiteral { // Integer literal.
 		result, err := constant.NewIntFromString(types.I32, token.Value)
 
 		if err != nil {
@@ -241,7 +241,7 @@ func (gen *CodeGenerator) resolveValue(token scanner.Token) value.Value {
 		}
 
 		val = result
-	} else if token.Kind == scanner.TokenKindFloatLiteral { // Float literal.
+	} else if token.Kind == lex.TokenKindFloatLiteral { // Float literal.
 		result, err := constant.NewFloatFromString(types.Float, token.Value)
 
 		if err != nil {
@@ -265,7 +265,7 @@ func (gen *CodeGenerator) expression() ExpressionAST {
 func (gen *CodeGenerator) identifier() IdentifierAST {
 	token := gen.Parser.Get()
 
-	if !scanner.IsIdentifier(token.Value) {
+	if !lex.IsIdentifier(token.Value) {
 		gen.Parser.Fatal("Expecting an identifier")
 	}
 
@@ -273,22 +273,22 @@ func (gen *CodeGenerator) identifier() IdentifierAST {
 }
 
 // IsVariableAssignment : Determine if the provided sequence of tokens represent a variable assignment.
-func IsVariableAssignment(sequence []scanner.Token) bool {
+func IsVariableAssignment(sequence []lex.Token) bool {
 	parser := parser.NewParser(sequence)
 
-	return parser.Peek().Kind == scanner.TokenKindEqualSign
+	return parser.Peek().Kind == lex.TokenKindEqualSign
 }
 
 // IsVariableDeclaration : Determine if the provided sequence of tokens represent a variable declaration.
-func IsVariableDeclaration(sequence []scanner.Token) bool {
+func IsVariableDeclaration(sequence []lex.Token) bool {
 	parser := parser.NewParser(sequence)
 
-	if IsTypeKeyword(parser.Get().Value) && parser.Next().Kind == scanner.TokenKindIdentifier {
+	if IsTypeKeyword(parser.Get().Value) && parser.Next().Kind == lex.TokenKindIdentifier {
 		peekKind := parser.Peek().Kind
 
-		if peekKind == scanner.TokenKindSemiColon { // Empty declaration.
+		if peekKind == lex.TokenKindSemiColon { // Empty declaration.
 			return true
-		} else if peekKind == scanner.TokenKindEqualSign { // Declaration + assignment.
+		} else if peekKind == lex.TokenKindEqualSign { // Declaration + assignment.
 			// TODO: Not checking after '='.
 
 			return true

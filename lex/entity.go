@@ -1,4 +1,4 @@
-package scanner
+package lex
 
 // Entity : Represents common entities such as operators and keywords.
 type Entity = string

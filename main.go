@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"golearn/codegen"
+	"golearn/lex"
 	"golearn/parser"
-	"golearn/scanner"
 
 	"github.com/llir/llvm/ir"
 )
@@ -13,9 +13,8 @@ func main() {
 	const src = `fn main () { float pi = "hello world" ; pi = 2.1 ; float pi2 ; pi2 = 3.16 ; float pi3 = 3.17 ; } fn _4hello () { }`
 	const mainFnName = "main"
 
-	var lexer = scanner.Scanner{}
-	var tokens = lexer.Scan(src)
-	var parser = parser.NewParser(tokens)
+	tokens := lex.Tokenize(src)
+	parser := parser.NewParser(tokens)
 
 	// Global LLVM module.
 	module := ir.NewModule()
@@ -26,8 +25,8 @@ func main() {
 	// Flag representing whether the main function was found.
 	mainFound := false
 
-	for token := parser.Get(); parser.Get().Kind != scanner.TokenKindEndOfFile; token = parser.Next() {
-		if token.Kind == scanner.TokenKindFnKeyword { // Function declaration 'fn'.
+	for token := parser.Get(); parser.Get().Kind != lex.TokenKindEndOfFile; token = parser.Next() {
+		if token.Kind == lex.TokenKindFnKeyword { // Function declaration 'fn'.
 			// Invoke the function AST generator.
 			fn := generator.Function()
 
@@ -38,7 +37,7 @@ func main() {
 			if fn.GetName() == mainFnName {
 				mainFound = true
 			}
-		} else if token.Kind == scanner.TokenKindUnknown { // Unknown token.
+		} else if token.Kind == lex.TokenKindUnknown { // Unknown token.
 			parser.UnknownToken()
 
 			return

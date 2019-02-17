@@ -1,15 +1,10 @@
-package scanner
+package lex
 
 import (
 	"regexp"
 	"strings"
 	"text/scanner"
 )
-
-// Scanner : Represents the lexical token scanner utility.
-type Scanner struct {
-	//
-}
 
 // IsIdentifier : Determine if input is an identifier token.
 func IsIdentifier(input string) bool {
@@ -36,8 +31,8 @@ func IsCharLiteral(input string) bool {
 	return regexp.MustCompile("^'[^\\']{0,1}'$").MatchString(input)
 }
 
-// Scan : Scan and break up input into lexical tokens.
-func (sc *Scanner) Scan(input string) []Token {
+// Tokenize : Scan and break up input into lexical tokens.
+func Tokenize(input string) []Token {
 	var scan scanner.Scanner
 	var tokens []Token
 
