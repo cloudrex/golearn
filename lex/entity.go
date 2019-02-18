@@ -16,6 +16,9 @@ const (
 	// KeywordBreak : Represents the loop break keyword.
 	KeywordBreak Entity = "break"
 
+	// KeywordWhile : Represents the while keyword.
+	KeywordWhile Entity = "while"
+
 	// KeywordContinue : Represents the loop continue keyword.
 	KeywordContinue Entity = "continue"
 
@@ -34,13 +37,25 @@ const (
 	// KeywordInt : Represents the integer-32 type keyword.
 	KeywordInt Entity = "int"
 
+	// KeywordFloat : Represents the float type keyword
+	KeywordFloat Entity = "float"
+
 	// KeywordString : Represents the string type keyword.
 	KeywordString Entity = "string"
+
+	// KeywordTrue : Represents the true boolean value.
+	KeywordTrue Entity = "true"
+
+	// KeywordFalse : Represents the false boolean value.
+	KeywordFalse Entity = "false"
 )
 
 const (
 	// OperatorAnd : Represents the logical AND operator.
 	OperatorAnd = "and"
+
+	// OperatorNot : Represents the logical NOT operator.
+	OperatorNot = "!"
 
 	// OperatorOr : Represents the logical OR operator.
 	OperatorOr = "or"

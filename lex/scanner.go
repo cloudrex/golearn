@@ -57,17 +57,17 @@ func Tokenize(input string) []Token {
 			kind = TokenKindCharKeyword
 		} else if text == KeywordInt { // Integer-32 short-hand type keyword 'int'.
 			kind = TokenKindIntKeyword
-		} else if text == "float" { // Float type keyword 'float'.
+		} else if text == KeywordFloat { // Float type keyword 'float'.
 			kind = TokenKindFloatKeyword
-		} else if text == "+" { // Addition operator '+'.
+		} else if text == OperatorAdd { // Addition operator '+'.
 			kind = TokenKindAddOp
-		} else if text == "-" { // Substraction operator '-'.
+		} else if text == OperatorSub { // Substraction operator '-'.
 			kind = TokenKindSubOp
-		} else if text == "*" { // Multiplication operator '*'.
+		} else if text == OperatorMult { // Multiplication operator '*'.
 			kind = TokenKindMultOp
-		} else if text == "/" { // Division operator '/'.
+		} else if text == OperatorDiv { // Division operator '/'.
 			kind = TokenKindDivOp
-		} else if text == "%" { // Modulos operator '%'.
+		} else if text == OperatorModulus { // Modulos operator '%'.
 			kind = TokenKindModulusOp
 		} else if IsIdentifier(text) { // Identifier.
 			kind = TokenKindIdentifier
@@ -93,28 +93,34 @@ func Tokenize(input string) []Token {
 			kind = TokenKindColon
 		} else if text == "=" { // Equal sign '='.
 			kind = TokenKindEqualSign
-		} else if text == ">" {
+		} else if text == ">" { // Greater than operator '>'.
 			kind = TokenKindGreaterThanOp
-		} else if text == "<" {
+		} else if text == "<" { // Less than operator '>'.
 			kind = TokenKindLessThanOp
-		} else if text == "!" {
+		} else if text == OperatorNot { // NOT operator '!'.
 			kind = TokenKindNotOp
-		} else if text == "&" {
+		} else if text == KeywordTrue { // True boolean 'true'.
+			kind = TokenKindTrueBool
+		} else if text == KeywordFalse { // False boolean 'false'.
+			kind = TokenKindFalseBool
+		} else if text == "&" { // Deference operator '&'.
 			kind = TokenKindDereferenceOp
-		} else if text == OperatorAttribute {
+		} else if text == OperatorAttribute { // Attribute operator '@'.
 			kind = TokenKindAttribute
-		} else if text == OperatorAnd {
+		} else if text == OperatorAnd { // AND operator keyword 'and'.
 			kind = TokenKindAndOp
-		} else if text == OperatorOr {
+		} else if text == OperatorOr { // OR operator keyword 'or'.
 			kind = TokenKindOrOp
-		} else if text == OperatorXOr {
+		} else if text == OperatorXOr { // XOR Operator keyword 'xor'.
 			kind = TokenKindXOrOp
-		} else if text == KeywordIf {
+		} else if text == KeywordIf { // If keyword 'if'
 			kind = TokenKindIfKeyword
-		} else if text == KeywordElse {
+		} else if text == KeywordElse { // Else keyword 'else'
 			kind = TokenKindElseKeyword
-		} else if text == KeywordFor {
+		} else if text == KeywordFor { // For keyword 'for'
 			kind = TokenKindForKeyword
+		} else if text == KeywordWhile { // While keyword 'while'
+			kind = TokenKindWhileKeyword
 		}
 
 		tokens = append(tokens, Token{Kind: kind, Value: text})

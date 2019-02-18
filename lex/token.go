@@ -126,4 +126,13 @@ const (
 
 	// TokenKindImportKeyword : Represents the import statement keyword 'import'.
 	TokenKindImportKeyword TokenKind = 37
+
+	// TokenKindWhileKeyword : Represents the while keyword 'while'.
+	TokenKindWhileKeyword TokenKind = 38
+
+	// TokenKindTrueBool : Represents the true boolean value 'true'.
+	TokenKindTrueBool TokenKind = 39
+
+	// TokenKindFalseBool : Represents the false boolean value 'false'.
+	TokenKindFalseBool TokenKind = 40
 )
