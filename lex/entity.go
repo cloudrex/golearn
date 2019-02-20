@@ -52,44 +52,44 @@ const (
 
 const (
 	// OperatorAnd : Represents the logical AND operator.
-	OperatorAnd = "and"
+	OperatorAnd Entity = "and"
 
 	// OperatorNot : Represents the logical NOT operator.
-	OperatorNot = "!"
+	OperatorNot Entity = "!"
 
 	// OperatorOr : Represents the logical OR operator.
-	OperatorOr = "or"
+	OperatorOr Entity = "or"
 
 	// OperatorXOr : Represents the logical XOR operator.
-	OperatorXOr = "xor"
+	OperatorXOr Entity = "xor"
 
 	// OperatorAdd : Represents the addition operator.
-	OperatorAdd = "+"
+	OperatorAdd Entity = "+"
 
 	// OperatorSub : Represents the subtraction operator.
-	OperatorSub = "-"
+	OperatorSub Entity = "-"
 
 	// OperatorMult : Represents the multiplication operator.
-	OperatorMult = "*"
+	OperatorMult Entity = "*"
 
 	// OperatorDiv : Represents the division operator.
-	OperatorDiv = "/"
+	OperatorDiv Entity = "/"
 
 	// OperatorModulus : Represents the modoulus operator.
-	OperatorModulus = "%"
+	OperatorModulus Entity = "%"
 
 	// OperatorExpontial : Represents the expontial operator.
-	OperatorExpontial = "^"
+	OperatorExpontial Entity = "^"
 
 	// OperatorAttribute : Represents the attribute operator.
-	OperatorAttribute = "@"
+	OperatorAttribute Entity = "@"
 
 	// OperatorDereference : Represents the pointer de-reference operator.
-	OperatorDereference = "&"
+	OperatorDereference Entity = "&"
 
 	// OperatorLessThan : Represents the logical less than operator.
-	OperatorLessThan = "<"
+	OperatorLessThan Entity = "<"
 
 	// OperatorGreaterThan : Represents the logical greater than operator.
-	OperatorGreaterThan = ">"
+	OperatorGreaterThan Entity = ">"
 )

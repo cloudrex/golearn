@@ -2,6 +2,9 @@ package lex
 
 import "regexp"
 
+// EOF : Represents the end-of-file of input.
+const EOF = "EOF"
+
 // Scanner : Performs lexical analysis and breaks up input into tokens.
 type Scanner struct {
 	input string
@@ -11,27 +14,68 @@ type Scanner struct {
 // NextChar : Retrieve the next character from input and advance the position counter.
 func (scanner *Scanner) NextChar() string {
 	if scanner.pos+1 >= len(scanner.input) {
-		return "EOF"
+		return EOF
 	}
 
 	scanner.pos++
 
-	return scanner.input[scanner.pos]
+	return string(scanner.input[scanner.pos])
+}
+
+// Get : Retrieve the character at the current input position.
+func (scanner *Scanner) Get() string {
+	return string(scanner.input[scanner.pos])
+}
+
+// HasNext : Whether the token iterator can continue.
+func (scanner *Scanner) HasNext() bool {
+	return scanner.pos < len(scanner.input)
 }
 
 // Next : Process the next token from input.
-func (scanner *Scanner) Next() Token {
-	for _, chr := range scanner.input {
-		token := Token{Value: chr}
+func (scanner *Scanner) Next() string {
+	var token string
 
-		if IsWhitespace(chr) {
-			return Token{Kind: TokenKindWhitespace, Value: chr}
+	for char := scanner.NextChar(); char != EOF; {
+		if IsWhitespaceChar(char) { // Ignore whitespace.
+			continue
+		} else if IsIdentifierChar(char) {
+			token += char
+
+			// Collect identifier.
+			for IsIdentifierChar(scanner.NextChar()) {
+				token += scanner.Get()
+			}
+		} else { // Unexpected character.
+			scanner.Fatal("Unexpected character")
 		}
 	}
+
+	return token
 }
 
-// IsWhitespace : Determine if input character is a whitespace character.
-func IsWhitespace(input string) bool {
+// Scan : Process all input tokens.
+func (scanner *Scanner) Scan() []string {
+	var tokens []string
+
+	// Append first token.
+	tokens = append(tokens, scanner.Get())
+
+	for scanner.HasNext() {
+		tokens = append(tokens, scanner.Next())
+	}
+
+	return tokens
+}
+
+// IsIdentifierChar : Determine if input character is part of an identifier.
+func IsIdentifierChar(input string) bool {
+	return regexp.MustCompile("[_a-zA-Z]").MatchString(input)
+
+}
+
+// IsWhitespaceChar : Determine if input character is a whitespace character.
+func IsWhitespaceChar(input string) bool {
 	return regexp.MustCompile("\\s").MatchString(input)
 }
 

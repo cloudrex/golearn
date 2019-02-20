@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"golearn/codegen"
 	"golearn/lex"
-	"golearn/parser"
-
-	"github.com/llir/llvm/ir"
 )
 
 func main() {
+	scn := lex.NewScanner("hello world !")
+
+	scn.Scan()
+}
+
+/* func tmpOldMain() {
 	const src = `fn main () { float pi = "hello world" ; pi = 2.1 ; float pi2 ; pi2 = 3.16 ; float pi3 = 3.17 ; } fn _4hello () { }`
 	const mainFnName = "main"
 
@@ -38,7 +39,7 @@ func main() {
 				mainFound = true
 			}
 		} else if token.Kind == lex.TokenKindImport { // Import statement.
-			
+
 		} else if token.Kind == lex.TokenKindUnknown { // Unknown token.
 			parser.UnknownToken()
 
@@ -56,3 +57,4 @@ func main() {
 	fmt.Println("\n\n--- LLVM IR ---\n")
 	fmt.Println(module)
 }
+*/
