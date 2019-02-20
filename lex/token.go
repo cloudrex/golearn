@@ -135,4 +135,7 @@ const (
 
 	// TokenKindFalseBool : Represents the false boolean value 'false'.
 	TokenKindFalseBool TokenKind = 40
+
+	// TokenKindWhitespace : Represents possible whitespace characters.
+	TokenKindWhitespace TokenKind = 41
 )

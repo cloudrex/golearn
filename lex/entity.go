@@ -83,4 +83,13 @@ const (
 
 	// OperatorAttribute : Represents the attribute operator.
 	OperatorAttribute = "@"
+
+	// OperatorDereference : Represents the pointer de-reference operator.
+	OperatorDereference = "&"
+
+	// OperatorLessThan : Represents the logical less than operator.
+	OperatorLessThan = "<"
+
+	// OperatorGreaterThan : Represents the logical greater than operator.
+	OperatorGreaterThan = ">"
 )
