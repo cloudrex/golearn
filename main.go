@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"golearn/lex"
 )
 
 func main() {
-	scn := lex.NewScanner("hello world !")
+	scn := lex.NewScanner("hello world more test keywords")
 
-	scn.Scan()
+	fmt.Println("Tokens:", scn.Scan())
 }
 
 /* func tmpOldMain() {

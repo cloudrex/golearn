@@ -12,14 +12,14 @@ func (scanner *Scanner) ShouldAccountTracePrefix(amount int) bool {
 }
 
 // TracePointerX : Create the character position pointer to indicate problem at current position.
-func (scanner *Scanner) TracePointerX(amount int, accountPrefix bool) string {
+func (scanner *Scanner) TracePointerX(accountPrefix bool) string {
 	pointer := ""
 
 	if accountPrefix {
 		pointer += "    " // Account for '... '.
 	}
 
-	for i := 0; i < amount-scanner.pos; i++ {
+	for i := 0; i < scanner.pos; i++ {
 		pointer += " "
 	}
 
@@ -30,12 +30,16 @@ func (scanner *Scanner) TracePointerX(amount int, accountPrefix bool) string {
 
 // TracePointer : Create the character position pointer to indicate problem at current position. Uses 20 as amount.
 func (scanner *Scanner) TracePointer() string {
-	return scanner.TracePointerX(20, scanner.ShouldAccountTracePrefix(20))
+	return scanner.TracePointerX(scanner.ShouldAccountTracePrefix(20))
 }
 
 // TraceSequenceX : Provide feedback on where exactly a certain error occurred.
 func (scanner *Scanner) TraceSequenceX(amount int) string {
 	if !scanner.ShouldAccountTracePrefix(amount) {
+		if len(scanner.input) < amount {
+			return scanner.input[0:len(scanner.input)]
+		}
+
 		return scanner.input[0:amount]
 	}
 
@@ -49,10 +53,10 @@ func (scanner *Scanner) TradeSequence() string {
 
 // CreateTrace : Creates a trace string with a character pointer.
 func (scanner *Scanner) CreateTrace() string {
-	return scanner.TradeSequence() + "\n" + scanner.TracePointer()
+	return "\t" + scanner.TradeSequence() + "\n\t" + scanner.TracePointer()
 }
 
 // Fatal : Report a fatal message. Application will exit.
 func (scanner *Scanner) Fatal(message string) {
-	panic(fmt.Errorf(message + "\n" + scanner.CreateTrace()))
+	panic(fmt.Errorf(message + "\n\n" + scanner.CreateTrace()))
 }

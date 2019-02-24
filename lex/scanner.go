@@ -1,6 +1,8 @@
 package lex
 
-import "regexp"
+import (
+	"regexp"
+)
 
 // EOF : Represents the end-of-file of input.
 const EOF = "EOF"
@@ -29,14 +31,14 @@ func (scanner *Scanner) Get() string {
 
 // HasNext : Whether the token iterator can continue.
 func (scanner *Scanner) HasNext() bool {
-	return scanner.pos < len(scanner.input)
+	return scanner.pos < len(scanner.input)-1
 }
 
 // Next : Process the next token from input.
 func (scanner *Scanner) Next() string {
 	var token string
 
-	for char := scanner.NextChar(); char != EOF; {
+	for char := scanner.Get(); char != EOF; char = scanner.NextChar() {
 		if IsWhitespaceChar(char) { // Ignore whitespace.
 			continue
 		} else if IsIdentifierChar(char) {
@@ -46,6 +48,8 @@ func (scanner *Scanner) Next() string {
 			for IsIdentifierChar(scanner.NextChar()) {
 				token += scanner.Get()
 			}
+
+			return token
 		} else { // Unexpected character.
 			scanner.Fatal("Unexpected character")
 		}
@@ -70,13 +74,13 @@ func (scanner *Scanner) Scan() []string {
 
 // IsIdentifierChar : Determine if input character is part of an identifier.
 func IsIdentifierChar(input string) bool {
-	return regexp.MustCompile("[_a-zA-Z]").MatchString(input)
+	return input != EOF && regexp.MustCompile("[_a-zA-Z]").MatchString(input)
 
 }
 
 // IsWhitespaceChar : Determine if input character is a whitespace character.
 func IsWhitespaceChar(input string) bool {
-	return regexp.MustCompile("\\s").MatchString(input)
+	return input != EOF && regexp.MustCompile("\\s").MatchString(input)
 }
 
 // NewScanner : Initialize a new Scanner.
