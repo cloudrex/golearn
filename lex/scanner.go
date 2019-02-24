@@ -1,7 +1,6 @@
 package lex
 
 import (
-	"fmt"
 	"regexp"
 )
 
@@ -72,9 +71,18 @@ func (scanner *Scanner) Next() string {
 
 			token += char
 
-			for IsNumericChar(scanner.NextChar()) {
+			decimalFlag := false
+
+			for next := scanner.NextChar(); IsNumericChar(next) || next == "." && !decimalFlag; next = scanner.NextChar() {
+				if scanner.Get() == "." {
+					if !decimalFlag {
+						decimalFlag = true
+					} else { // Decimal indicator '.' appearing twice
+						scanner.Fatal("Unexpected character")
+					}
+				}
+
 				token += scanner.Get()
-				fmt.Println("Num...")
 			}
 
 			return token
