@@ -62,9 +62,6 @@ func (scanner *Scanner) Next() string {
 func (scanner *Scanner) Scan() []string {
 	var tokens []string
 
-	// Append first token.
-	tokens = append(tokens, scanner.Get())
-
 	for scanner.HasNext() {
 		tokens = append(tokens, scanner.Next())
 	}
