@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	scn := lex.NewScanner("hello world more test keywords")
+	scn := lex.NewScanner("hello world \"string literal\"")
 
 	fmt.Println("Tokens:", scn.Scan())
 }

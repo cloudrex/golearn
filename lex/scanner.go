@@ -41,6 +41,12 @@ func (scanner *Scanner) Next() string {
 	for char := scanner.Get(); char != EOF; char = scanner.NextChar() {
 		if IsWhitespaceChar(char) { // Ignore whitespace.
 			continue
+		} else if char == "\"" { // String literal.
+			for scanner.NextChar() != "\"" {
+				token += scanner.Get()
+			}
+
+			return token
 		} else if IsIdentifierChar(char) {
 			token += char
 
