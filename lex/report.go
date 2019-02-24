@@ -35,6 +35,7 @@ func (scanner *Scanner) TracePointer() string {
 
 // TraceSequenceX : Provide feedback on where exactly a certain error occurred.
 func (scanner *Scanner) TraceSequenceX(amount int) string {
+	fmt.Println("Check 1")
 	if !scanner.ShouldAccountTracePrefix(amount) {
 		if len(scanner.input) < amount {
 			return scanner.input[0:len(scanner.input)]
@@ -43,7 +44,9 @@ func (scanner *Scanner) TraceSequenceX(amount int) string {
 		return scanner.input[0:amount]
 	}
 
-	return "... " + scanner.input[scanner.pos:scanner.pos+amount]
+	sequence := scanner.input[0:]
+
+	return "... " + sequence
 }
 
 // TradeSequence : Provide feedback on where exactly a certain error occurred. Returns last 20 processed characters.

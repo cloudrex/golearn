@@ -16,11 +16,18 @@ type Scanner struct {
 
 // NextChar : Retrieve the next character from input and advance the position counter.
 func (scanner *Scanner) NextChar() string {
+	char := scanner.PeekChar()
+
+	scanner.pos++
+
+	return char
+}
+
+// PeekChar : Retrieve the next character from input without changing the position counter.
+func (scanner *Scanner) PeekChar() string {
 	if scanner.pos+1 >= len(scanner.input) {
 		return EOF
 	}
-
-	scanner.pos++
 
 	return string(scanner.input[scanner.pos])
 }
@@ -39,8 +46,6 @@ func (scanner *Scanner) HasNext() bool {
 func (scanner *Scanner) Next() string {
 	var token string
 
-	decimalFlag := false
-
 	// TODO: Inner loops (until) need to check for end-of-file. Implement Until() method similar to codegen's.
 	for char := scanner.Get(); char != EOF; char = scanner.NextChar() {
 		if IsWhitespaceChar(char) { // Ignore whitespace.
@@ -54,8 +59,17 @@ func (scanner *Scanner) Next() string {
 			scanner.NextChar()
 
 			return "\"" + token + "\""
-		} else if IsNumericChar(char) || (char == "." && decimalFlag) {
-			decimalFlag = false
+		} else if IsNumericChar(char) || char == "." {
+			if char == "." {
+				if IsNumericChar(scanner.PeekChar()) {
+					token += "."
+
+					continue
+				}
+
+				scanner.Fatal("Unexpected character")
+			}
+
 			token += char
 
 			for IsNumericChar(scanner.NextChar()) {
