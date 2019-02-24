@@ -1,6 +1,7 @@
 package lex
 
 import (
+	"fmt"
 	"regexp"
 )
 
@@ -38,12 +39,28 @@ func (scanner *Scanner) HasNext() bool {
 func (scanner *Scanner) Next() string {
 	var token string
 
+	decimalFlag := false
+
+	// TODO: Inner loops (until) need to check for end-of-file. Implement Until() method similar to codegen's.
 	for char := scanner.Get(); char != EOF; char = scanner.NextChar() {
 		if IsWhitespaceChar(char) { // Ignore whitespace.
 			continue
 		} else if char == "\"" { // String literal.
-			for scanner.NextChar() != "\"" {
+			for next := scanner.NextChar(); next != "\"" && next != EOF; next = scanner.NextChar() {
 				token += scanner.Get()
+			}
+
+			// Consume ending '"'.
+			scanner.NextChar()
+
+			return "\"" + token + "\""
+		} else if IsNumericChar(char) || (char == "." && decimalFlag) {
+			decimalFlag = false
+			token += char
+
+			for IsNumericChar(scanner.NextChar()) {
+				token += scanner.Get()
+				fmt.Println("Num...")
 			}
 
 			return token
@@ -78,7 +95,11 @@ func (scanner *Scanner) Scan() []string {
 // IsIdentifierChar : Determine if input character is part of an identifier.
 func IsIdentifierChar(input string) bool {
 	return input != EOF && regexp.MustCompile("[_a-zA-Z]").MatchString(input)
+}
 
+// IsNumericChar : Determine if input character is a number.
+func IsNumericChar(input string) bool {
+	return input != EOF && regexp.MustCompile("[0-9]").MatchString(input)
 }
 
 // IsWhitespaceChar : Determine if input character is a whitespace character.
