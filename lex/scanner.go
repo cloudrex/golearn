@@ -29,7 +29,7 @@ func (scanner *Scanner) PeekChar() string {
 		return EOF
 	}
 
-	return string(scanner.input[scanner.pos])
+	return string(scanner.input[scanner.pos+1])
 }
 
 // Get : Retrieve the character at the current input position.
@@ -55,7 +55,7 @@ func (scanner *Scanner) Next() string {
 				token += scanner.Get()
 			}
 
-			// Consume ending '"'.
+			// Consume '"'.
 			scanner.NextChar()
 
 			return "\"" + token + "\""
