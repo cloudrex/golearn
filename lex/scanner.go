@@ -14,101 +14,107 @@ type Scanner struct {
 }
 
 // NextChar : Retrieve the next character from input and advance the position counter.
-func (scanner *Scanner) NextChar() string {
-	char := scanner.PeekChar()
+func (scn *Scanner) NextChar() string {
+	char := scn.PeekChar()
 
-	scanner.pos++
+	scn.pos++
 
 	return char
 }
 
 // PeekChar : Retrieve the next character from input without changing the position counter.
-func (scanner *Scanner) PeekChar() string {
-	if scanner.pos+1 >= len(scanner.input) {
+func (scn *Scanner) PeekChar() string {
+	if scn.pos+1 >= len(scn.input) {
 		return EOF
 	}
 
-	return string(scanner.input[scanner.pos+1])
+	return string(scn.input[scn.pos+1])
 }
 
 // Get : Retrieve the character at the current input position.
-func (scanner *Scanner) Get() string {
-	return string(scanner.input[scanner.pos])
+func (scn *Scanner) Get() string {
+	return string(scn.input[scn.pos])
 }
 
 // HasNext : Whether the token iterator can continue.
-func (scanner *Scanner) HasNext() bool {
-	return scanner.pos < len(scanner.input)-1
+func (scn *Scanner) HasNext() bool {
+	return scn.pos < len(scn.input)-1
 }
 
 // Next : Process the next token from input.
-func (scanner *Scanner) Next() string {
-	var token string
+func (scn *Scanner) Next() string {
+	var buffer string
 
 	// TODO: Inner loops (until) need to check for end-of-file. Implement Until() method similar to codegen's.
-	for char := scanner.Get(); char != EOF; char = scanner.NextChar() {
+	for char := scn.Get(); char != EOF; char = scn.NextChar() {
 		if IsWhitespaceChar(char) { // Ignore whitespace.
 			continue
 		} else if char == "\"" { // String literal.
-			for next := scanner.NextChar(); next != "\"" && next != EOF; next = scanner.NextChar() {
-				token += scanner.Get()
+			for next := scn.NextChar(); next != "\"" && next != EOF; next = scn.NextChar() {
+				buffer += scn.Get()
 			}
 
 			// Consume '"'.
-			scanner.NextChar()
+			scn.NextChar()
 
-			return "\"" + token + "\""
+			return "\"" + buffer + "\""
+		} else if char == "-" && scn.PeekChar() == ">" { // Function return type symbol.
+			// Consume both tokens.
+			scn.NextChar()
+			scn.NextChar()
+
+			return "->"
 		} else if IsNumericChar(char) || char == "." {
 			if char == "." {
-				if IsNumericChar(scanner.PeekChar()) {
-					token += "."
+				if IsNumericChar(scn.PeekChar()) {
+					buffer += "."
 
 					continue
 				}
 
-				scanner.Fatal("Unexpected character")
+				scn.Fatal("Unexpected character")
 			}
 
-			token += char
+			buffer += char
 
 			decimalFlag := false
 
-			for next := scanner.NextChar(); IsNumericChar(next) || next == "." && !decimalFlag; next = scanner.NextChar() {
-				if scanner.Get() == "." {
+			for next := scn.NextChar(); IsNumericChar(next) || next == "." && !decimalFlag; next = scn.NextChar() {
+				if scn.Get() == "." {
 					if !decimalFlag {
 						decimalFlag = true
 					} else { // Decimal indicator '.' appearing twice
-						scanner.Fatal("Unexpected character")
+						scn.Fatal("Unexpected character")
 					}
 				}
 
-				token += scanner.Get()
+				buffer += scn.Get()
 			}
 
-			return token
+			return buffer
 		} else if IsIdentifierChar(char) {
-			token += char
+			buffer += char
 
 			// Collect identifier.
-			for IsIdentifierChar(scanner.NextChar()) {
-				token += scanner.Get()
+			for IsIdentifierChar(scn.NextChar()) {
+				buffer += scn.Get()
 			}
 
-			return token
+			return buffer
 		} else { // Unexpected character.
-			scanner.Fatal("Unexpected character")
+			scn.Fatal("Unexpected character")
 		}
 	}
 
-	return token
+	return buffer
 }
 
 // Scan : Process all input tokens.
-func (scanner *Scanner) Scan() []string {
+func (scn *Scanner) Scan() []string {
 	var tokens []string
 
-	for scanner.HasNext() {
-		tokens = append(tokens, scanner.Next())
+	for scn.HasNext() {
+		tokens = append(tokens, scn.Next())
 	}
 
 	return tokens

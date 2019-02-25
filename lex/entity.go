@@ -48,6 +48,14 @@ const (
 
 	// KeywordFalse : Represents the false boolean value.
 	KeywordFalse Entity = "false"
+
+	// KeywordReturn : Represents the function return keyword.
+	KeywordReturn Entity = "return"
+)
+
+const (
+	// SymbolReturnType Type : Represents the function return type symbol.
+	SymbolReturnType = "->"
 )
 
 const (

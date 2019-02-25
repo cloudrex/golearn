@@ -3,8 +3,8 @@ package lex
 import "fmt"
 
 // ShouldAccountTracePrefix : Determine if the trace prefix's character amount should be accounted for.
-func (scanner *Scanner) ShouldAccountTracePrefix(amount int) bool {
-	if scanner.pos == 0 || scanner.pos < amount {
+func (scn *Scanner) ShouldAccountTracePrefix(amount int) bool {
+	if scn.pos == 0 || scn.pos < amount {
 		return false
 	}
 
@@ -12,14 +12,14 @@ func (scanner *Scanner) ShouldAccountTracePrefix(amount int) bool {
 }
 
 // TracePointerX : Create the character position pointer to indicate problem at current position.
-func (scanner *Scanner) TracePointerX(accountPrefix bool) string {
+func (scn *Scanner) TracePointerX(accountPrefix bool) string {
 	pointer := ""
 
 	if accountPrefix {
 		pointer += "    " // Account for '... '.
 	}
 
-	for i := 0; i < scanner.pos; i++ {
+	for i := 0; i < scn.pos; i++ {
 		pointer += " "
 	}
 
@@ -29,37 +29,37 @@ func (scanner *Scanner) TracePointerX(accountPrefix bool) string {
 }
 
 // TracePointer : Create the character position pointer to indicate problem at current position. Uses 20 as amount.
-func (scanner *Scanner) TracePointer() string {
-	return scanner.TracePointerX(scanner.ShouldAccountTracePrefix(20))
+func (scn *Scanner) TracePointer() string {
+	return scn.TracePointerX(scn.ShouldAccountTracePrefix(20))
 }
 
 // TraceSequenceX : Provide feedback on where exactly a certain error occurred.
-func (scanner *Scanner) TraceSequenceX(amount int) string {
+func (scn *Scanner) TraceSequenceX(amount int) string {
 	fmt.Println("Check 1")
-	if !scanner.ShouldAccountTracePrefix(amount) {
-		if len(scanner.input) < amount {
-			return scanner.input[0:len(scanner.input)]
+	if !scn.ShouldAccountTracePrefix(amount) {
+		if len(scn.input) < amount {
+			return scn.input[0:len(scn.input)]
 		}
 
-		return scanner.input[0:amount]
+		return scn.input[0:amount]
 	}
 
-	sequence := scanner.input[0:]
+	sequence := scn.input[0:]
 
 	return "... " + sequence
 }
 
 // TradeSequence : Provide feedback on where exactly a certain error occurred. Returns last 20 processed characters.
-func (scanner *Scanner) TradeSequence() string {
-	return scanner.TraceSequenceX(20)
+func (scn *Scanner) TradeSequence() string {
+	return scn.TraceSequenceX(20)
 }
 
 // CreateTrace : Creates a trace string with a character pointer.
-func (scanner *Scanner) CreateTrace() string {
-	return "\t" + scanner.TradeSequence() + "\n\t" + scanner.TracePointer()
+func (scn *Scanner) CreateTrace() string {
+	return "\t" + scn.TradeSequence() + "\n\t" + scn.TracePointer()
 }
 
 // Fatal : Report a fatal message. Application will exit.
-func (scanner *Scanner) Fatal(message string) {
-	panic(fmt.Errorf(message + "\n\n" + scanner.CreateTrace()))
+func (scn *Scanner) Fatal(message string) {
+	panic(fmt.Errorf(message + "\n\n" + scn.CreateTrace()))
 }

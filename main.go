@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	scn := lex.NewScanner("hello world \"string literal\" 3 3..14 after")
+	scn := lex.NewScanner("hello world -> \"string literal\"")
 
 	fmt.Println("Tokens:", scn.Scan())
 }
