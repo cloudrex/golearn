@@ -104,8 +104,7 @@ func (scn *Scanner) Next() string {
 			return "\"" + buffer + "\""
 		} else if char == "-" && scn.PeekChar() == ">" { // Function return type symbol.
 			// Consume both tokens.
-			scn.NextChar()
-			scn.NextChar()
+			scn.ConsumeX(2)
 
 			return "->"
 		} else if IsNumericChar(char) || char == "." {
