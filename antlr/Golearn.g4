@@ -1,4 +1,5 @@
-grammar Calc;
+lexer grammar Golearn;
+import GolearnParser;
 
 // Tokens
 NUM: [0-9]+;
@@ -10,10 +11,15 @@ KEY_DELETE: 'delete';
 KEY_RETURN: 'ret';
 KEY_YIELD: 'yield';
 KEY_FOR: 'for';
+KEY_NAMESPACE: 'space';
+KEY_VOID: 'void';
 
-// Rules
-start: EXPR EOF;
+// Symbols
+SYM_ATTRIB: '@';
 
+SYM_FN_TYPE: '~>';
+
+// Operators
 BIN_OP:
 	'*'
 	| '/'
@@ -25,22 +31,23 @@ BIN_OP:
 	| '>'
 	| '<='
 	| '>='
-	| '!=';
+	| '!='
+	| '&&'
+	| '||';
 
 UNARY_OP: '-' | '!' | '&' | '*';
 
-OP: BIN_OP | UNARY_OP;
+SYM_END: ';';
 
-DECLARE: TYPE ASSIGN | TYPE ID;
+SYM_BLOCK_L: '{';
 
-ASSIGN: ID '=' EXPR;
+SYM_BLOCK_R: '}';
 
-STATE: EXPR ';';
+SYM_ARGS_L: '(';
 
-BODY: STATE;
+SYM_ARGS_R: ')';
 
-BLOCK: '{' BODY* '}';
-
+// Other
 FN_MOD: 'pub' | 'prot' | 'priv';
 
 FN_STATIC: 'stat';
@@ -57,23 +64,13 @@ TYPE:
 	| 'dyn'
 	| 'bool';
 
-VOID: 'void';
-
 CONST: 'nil' | 'true' | 'false';
 
 ARG: TYPE ID | TYPE ID ',';
 
-ARGS_L: '(';
-
-ARGS_R: ')';
-
-ATTRIB: '@' ID;
-
-FN_TYPE_SYMBOL: '~>';
-
-// Define ID at the end to avoid taking precedence.
+// Define at the end to avoid taking precedence.
 ID: [a-zA-Z]+ [_a-zA-Z0-9]*;
 
 VAL: ID | NUM;
 
-EXPR: VAL | VAL BIN_OP VAL | UNARY_OP VAL;
+EXPR: VAL | VAL BIN_OP VAL | UNARY_OP VAL | '(' EXPR ')';

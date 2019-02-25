@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("@attr @attr2() fn pub stat main() ~> int64 {}")
+	is := antlr.NewInputStream("// /* */ @attr @attr2() fn pub main ~> int { ret 0+2+2; }")
 
 	// Create the Lexer
 	lexer := parser.NewCalcLexer(is)

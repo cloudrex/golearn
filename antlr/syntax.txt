@@ -1,0 +1,10 @@
+// Comment
+
+/*
+    Multi-line
+    comment
+*/
+
+fn async prot main() ~> int64 {
+    ret 51234;
+}
