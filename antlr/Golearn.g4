@@ -14,7 +14,9 @@ expr:
 	| OpUnary Atom
 	| SymArgsL expr SymArgsR;
 
-args: SymArgsL (Type Id SymComma)* SymArgsR;
+arg: Type '*'? Id;
+
+args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 
 statement: expr SymEnd | fnx;
 
@@ -22,6 +24,7 @@ block: SymBlockL statement* SymBlockR;
 
 fn: attrib* KeyFn Id args? (SymFnType Type)? block;
 
+// Anonymous function.
 fnx: KeyFnx args? (SymFnType FnReturnType)? block;
 
 attrib: SymAttribute Id args?;

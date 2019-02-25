@@ -1,8 +1,10 @@
 lexer grammar Golearn;
 
-// Tokens.
+// General.
 Num: [0-9]+;
 Whitespace: [ \r\n\t]+ -> skip;
+StrLiteral: '"' [^\\"]* '"';
+CharLiteral: '\'' [a-zA-Z]? '\'';
 
 // Keywords.
 KeyFn: 'fn';
@@ -40,6 +42,12 @@ SymArgsR: ')';
 
 SymComma: ',';
 
+SymArray: '[]';
+
+SymBracketL: '[';
+
+SymBracketR: ']';
+
 // Operators.
 OpBin:
 	'*'
@@ -56,7 +64,7 @@ OpBin:
 	| '&&'
 	| '||';
 
-OpUnary: '-' | '!' | '&' | '*';
+OpUnary: '-' | '!';
 
 // Other.
 FnModifier: 'pub' | 'prot' | 'priv';
