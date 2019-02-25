@@ -1,4 +1,4 @@
-parser grammar Golearn;
+grammar Golearn;
 import GolearnLexer;
 
 expr: Atom | Atom OpBin Atom | OpUnary Atom | '(' expr ')';
