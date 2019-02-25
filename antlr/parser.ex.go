@@ -5,8 +5,8 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
-type calcListener struct {
-	*parser.BaseCalcListener
+type golearnListener struct {
+	*parser.BaseGolearnListener
 }
 
 func main() {
@@ -14,12 +14,12 @@ func main() {
 	is := antlr.NewInputStream("1 + 2 * 3")
 
 	// Create the Lexer
-	lexer := parser.NewCalcLexer(is)
+	lexer := parser.NewGolearnLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	// Create the Parser
-	p := parser.NewCalcParser(stream)
+	p := parser.NewGolearnParser(stream)
 
 	// Finally parse the expression
-	antlr.ParseTreeWalkerDefault.Walk(&calcListener{}, p.Start())
+	antlr.ParseTreeWalkerDefault.Walk(&golearnListener{}, p.Start())
 }
