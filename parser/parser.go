@@ -84,8 +84,8 @@ func (parser *Parser) Until(kind scanner.TokenKind) []scanner.Token {
 	return tokens
 }
 
-// Bounds : Verifies that current position is within bounds, otherwise relocates position to corresponding position.
-func (parser *Parser) Bounds() *Parser {
+// bounds : Verifies that current position is within bounds, otherwise relocates position to corresponding position.
+func (parser *Parser) bounds() *Parser {
 	if parser.pos >= len(parser.tokens) {
 		parser.pos = len(parser.tokens) - 1
 	} else if parser.pos < 0 {
@@ -128,7 +128,7 @@ func (parser *Parser) Teleport(pos int) *Parser {
 	parser.pos = pos
 
 	// Reset position bounds if applicable.
-	parser.Bounds()
+	parser.bounds()
 
 	// Report change to attached sync target if applicable.
 	if parser.syncTarget != nil {
