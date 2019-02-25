@@ -1,4 +1,4 @@
-antlr/
+antlr/parser
 bin/
 .vscode/
 .idea/
