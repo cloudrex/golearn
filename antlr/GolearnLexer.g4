@@ -21,6 +21,7 @@ KeyNil: 'nil';
 KeyStatic: 'stat';
 KeyAsync: 'async';
 KeyConst: 'const';
+KeyFnx: 'fnx';
 
 // Symbols.
 SymAttribute: '@';
@@ -36,6 +37,8 @@ SymBlockR: '}';
 SymArgsL: '(';
 
 SymArgsR: ')';
+
+SymComma: ',';
 
 // Operators.
 OpBin:
@@ -56,8 +59,6 @@ OpBin:
 OpUnary: '-' | '!' | '&' | '*';
 
 // Other.
-Path: Id '/'?;
-
 FnModifier: 'pub' | 'prot' | 'priv';
 
 Type:
@@ -72,7 +73,8 @@ Type:
 	| 'dyn'
 	| 'bool';
 
-// Define at the end to avoid taking precedence.
+FnReturnType: Type | 'void';
+
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;
 
 Atom: Id | Num;

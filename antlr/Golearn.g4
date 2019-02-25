@@ -2,9 +2,9 @@ grammar Golearn;
 import GolearnLexer;
 
 // Entry.
-start: namespace EOF;
+start: imprt* namespace (strct | class | fn)* EOF;
 
-imprt: KeyImport Path SymEnd;
+imprt: KeyImport Id SymEnd;
 
 namespace: KeyNamespace Id SymEnd;
 
@@ -14,13 +14,17 @@ expr:
 	| OpUnary Atom
 	| SymArgsL expr SymArgsR;
 
-arg: Type Id | Type Id SymEnd;
+args: SymArgsL (Type Id SymComma)* SymArgsR;
 
-statement: expr SymEnd;
+statement: expr SymEnd | fnx;
 
 block: SymBlockL statement* SymBlockR;
 
-fn: KeyFn Id block;
+fn: attrib* KeyFn Id args? (SymFnType Type)? block;
+
+fnx: KeyFnx args? (SymFnType FnReturnType)? block;
+
+attrib: SymAttribute Id args?;
 
 strct: KeyStruct Id block;
 

@@ -11,7 +11,7 @@ type golearnListener struct {
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("space test ;")
+	is := antlr.NewInputStream("space test ; @attrib @attrib() fn test() ~> int64 { fnx () {} }")
 
 	// Create the Lexer
 	lexer := parser.NewGolearnLexer(is)
@@ -21,5 +21,7 @@ func main() {
 	p := parser.NewGolearnParser(stream)
 
 	// Finally parse the expression
-	antlr.ParseTreeWalkerDefault.Walk(&golearnListener{}, p.Start())
+	listener := golearnListener{}
+
+	antlr.ParseTreeWalkerDefault.Walk(&listener, p.Start())
 }
