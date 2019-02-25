@@ -1,7 +1,7 @@
 lexer grammar Golearn;
 
 // General.
-Num: [0-9]+;
+Num: [0-9]+ (.[0-9]+)?;
 Whitespace: [ \r\n\t]+ -> skip;
 StrLiteral: '"' [^\\"]* '"';
 CharLiteral: '\'' [a-zA-Z]? '\'';

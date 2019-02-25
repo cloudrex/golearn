@@ -11,7 +11,7 @@ type golearnListener struct {
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("space test ; @attrib @attrib() fn test(str myArg, str mySecond) ~> int64 { fnx () {} }")
+	is := antlr.NewInputStream("space test ; @attrib @attrib() fn test(str *myArg, str mySecond) ~> int64 { fnx () {} }")
 
 	// Create the Lexer
 	lexer := parser.NewGolearnLexer(is)
