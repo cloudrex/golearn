@@ -4,116 +4,76 @@ grammar Calc;
 NUM: [0-9]+;
 WHITESPACE: [ \r\n\t]+ -> skip;
 
+// Keywords
+KEY_FN: 'fn';
+KEY_DELETE: 'delete';
+KEY_RETURN: 'ret';
+KEY_YIELD: 'yield';
+KEY_FOR: 'for';
+
 // Rules
 start: EXPR EOF;
 
-BIN_OP
-: '*'
-| '/'
-| '+'
-| '-'
-| '%'
-| '^'
-| '<'
-| '>'
-| '<='
-| '>='
-| '!='
-;
+BIN_OP:
+	'*'
+	| '/'
+	| '+'
+	| '-'
+	| '%'
+	| '^'
+	| '<'
+	| '>'
+	| '<='
+	| '>='
+	| '!=';
 
-UNARY_OP
-: '-'
-| '!'
-| '&'
-| '*'
-;
+UNARY_OP: '-' | '!' | '&' | '*';
 
-OP
-: BIN_OP
-| UNARY_OP
-;
+OP: BIN_OP | UNARY_OP;
 
-DECLARE
-: TYPE ASSIGN
-| TYPE ID
-;
+DECLARE: TYPE ASSIGN | TYPE ID;
 
-ASSIGN
-: ID '=' EXPR
-;
+ASSIGN: ID '=' EXPR;
 
 STATE: EXPR ';';
 
 BODY: STATE;
 
-BLOCK
-: '{' BODY '}'
-| '{' '}'
-;
+BLOCK: '{' BODY* '}';
 
-FN_MOD
-: 'pub'
-| 'prot'
-| 'priv'
-;
+FN_MOD: 'pub' | 'prot' | 'priv';
 
 FN_STATIC: 'stat';
 
-TYPE
-: 'int'
-| 'int64'
-| 'int32'
-| 'float'
-| 'str'
-| 'obj'
-| 'char'
-| 'void'
-| 'dyn'
-;
+TYPE:
+	'int'
+	| 'int64'
+	| 'int32'
+	| 'float'
+	| 'double'
+	| 'str'
+	| 'obj'
+	| 'char'
+	| 'dyn'
+	| 'bool';
 
-CONST
-: 'nil'
-| 'true'
-| 'false'
-;
+VOID: 'void';
 
-ARGS
-: '(' ')'
-;
+CONST: 'nil' | 'true' | 'false';
 
-FN_PROTO
-: ID FN_TYPE_SYMBOL TYPE
-| ID
-| ID ARGS FN_TYPE_SYMBOL TYPE
-| ID ARGS
-;
+ARG: TYPE ID | TYPE ID ',';
 
-ATTRIB
-: '@' ID
-| '@' ID ARGS
-;
+ARGS_L: '(';
+
+ARGS_R: ')';
+
+ATTRIB: '@' ID;
 
 FN_TYPE_SYMBOL: '~>';
 
-FN_KEY: 'fn';
-
-FN
-: FN_KEY FN_PROTO BLOCK
-| FN_KEY FN_MOD FN_PROTO BLOCK
-| FN_KEY FN_STATIC FN_MOD FN_PROTO BLOCK
-| ATTRIB FN
-;
-
 // Define ID at the end to avoid taking precedence.
-ID: [a-zA-Z]+[_a-zA-Z0-9]*;
+ID: [a-zA-Z]+ [_a-zA-Z0-9]*;
 
-VAL
-: ID
-| NUM
-;
+VAL: ID | NUM;
 
-EXPR
-: VAL
-| VAL BIN_OP VAL
-| UNARY_OP VAL
-;
+EXPR: VAL | VAL BIN_OP VAL | UNARY_OP VAL;

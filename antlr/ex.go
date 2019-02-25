@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 
 	"./parser"
@@ -9,7 +10,7 @@ import (
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("@attr @attr2() fn stat pub main() ~> void {}")
+	is := antlr.NewInputStream("@attr @attr2() fn pub stat main() ~> int64 {}")
 
 	// Create the Lexer
 	lexer := parser.NewCalcLexer(is)
