@@ -48,6 +48,8 @@ SymBracketL: '[';
 
 SymBracketR: ']';
 
+SymSpread: '..';
+
 // Operators.
 OpBin:
 	'*'
@@ -85,4 +87,4 @@ FnReturnType: Type | 'void';
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;
 
-Atom: Id | NumLiteral;
+Atom: Id | NumLiteral | StrLiteral | CharLiteral;

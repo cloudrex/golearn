@@ -4,6 +4,10 @@ import GolearnLexer;
 // Entry.
 start: imprt* namespace (strct | class | fn)* EOF;
 
+assign: Id '=' expr;
+
+declare: Type Id '=' expr | Type Id;
+
 imprt: KeyImport Id SymEnd;
 
 namespace: KeyNamespace Id SymEnd;
@@ -29,6 +33,8 @@ fnx: KeyFnx args? (SymFnType FnReturnType)? block;
 
 attrib: SymAttribute Id args?;
 
-strct: KeyStruct Id block;
+structEntry: Id ':' Type SymEnd;
+
+strct: KeyStruct Id SymBlockL structEntry* SymBlockR;
 
 class: KeyClass Id block;
