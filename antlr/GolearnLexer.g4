@@ -1,10 +1,10 @@
 lexer grammar Golearn;
 
-// Tokens
+// Tokens.
 Num: [0-9]+;
 Whitespace: [ \r\n\t]+ -> skip;
 
-// Keywords
+// Keywords.
 KeyFn: 'fn';
 KeyDelete: 'delete';
 KeyReturn: 'ret';
@@ -12,13 +12,22 @@ KeyYield: 'yield';
 KeyFor: 'for';
 KeyNamespace: 'space';
 KeyVoid: 'void';
+KeyStruct: 'struct';
+KeyClass: 'class';
+KeyImport: 'import';
+KeyTrue: 'true';
+KeyFalse: 'false';
+KeyNil: 'nil';
+KeyStatic: 'stat';
+KeyAsync: 'async';
+KeyConst: 'const';
 
-// Symbols
+// Symbols.
 SymAttribute: '@';
 
 SymFnType: '~>';
 
-SymSemicolon: ';';
+SymEnd: ';';
 
 SymBlockL: '{';
 
@@ -28,7 +37,7 @@ SymArgsL: '(';
 
 SymArgsR: ')';
 
-// Operators
+// Operators.
 OpBin:
 	'*'
 	| '/'
@@ -46,10 +55,10 @@ OpBin:
 
 OpUnary: '-' | '!' | '&' | '*';
 
-// Other
-FnModifier: 'pub' | 'prot' | 'priv';
+// Other.
+Path: Id '/'?;
 
-FnStatic: 'stat';
+FnModifier: 'pub' | 'prot' | 'priv';
 
 Type:
 	'int'
@@ -62,8 +71,6 @@ Type:
 	| 'char'
 	| 'dyn'
 	| 'bool';
-
-Const: 'nil' | 'true' | 'false';
 
 // Define at the end to avoid taking precedence.
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;

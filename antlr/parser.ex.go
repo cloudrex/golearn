@@ -11,7 +11,7 @@ type golearnListener struct {
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("1 + 2 * 3")
+	is := antlr.NewInputStream("space test ;")
 
 	// Create the Lexer
 	lexer := parser.NewGolearnLexer(is)

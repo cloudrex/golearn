@@ -1,12 +1,27 @@
 grammar Golearn;
 import GolearnLexer;
 
-expr: Atom | Atom OpBin Atom | OpUnary Atom | '(' expr ')';
+// Entry.
+start: namespace EOF;
 
-arg: Type Id | Type Id ',';
+imprt: KeyImport Path SymEnd;
 
-statement: expr ';';
+namespace: KeyNamespace Id SymEnd;
+
+expr:
+	Atom
+	| Atom OpBin Atom
+	| OpUnary Atom
+	| SymArgsL expr SymArgsR;
+
+arg: Type Id | Type Id SymEnd;
+
+statement: expr SymEnd;
 
 block: SymBlockL statement* SymBlockR;
 
 fn: KeyFn Id block;
+
+strct: KeyStruct Id block;
+
+class: KeyClass Id block;
