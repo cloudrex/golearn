@@ -1,7 +1,7 @@
 lexer grammar Golearn;
 
 // General.
-Num: [0-9]+ (.[0-9]+)?;
+NumLiteral: [0-9]+ (.[0-9]+)?;
 Whitespace: [ \r\n\t]+ -> skip;
 StrLiteral: '"' [^\\"]* '"';
 CharLiteral: '\'' [a-zA-Z]? '\'';
@@ -85,4 +85,4 @@ FnReturnType: Type | 'void';
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;
 
-Atom: Id | Num;
+Atom: Id | NumLiteral;
