@@ -116,9 +116,7 @@ OpUnary: '-' | '!';
 
 // Other.
 Modifier: 'pub' | 'priv' | 'prot';
-
 ModifierStatic: 'static';
-
 ModifierAsync: 'async';
 
 // Function reference. TODO | '*' Type; Also, missing 'void' type.
