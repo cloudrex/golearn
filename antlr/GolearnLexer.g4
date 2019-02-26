@@ -88,9 +88,9 @@ TypeString: 'str';
 TypeObject: 'obj';
 TypeChar: 'char';
 TypeBool: 'bool';
+TypeVoid: 'void';
 
-
-ComplexType:
+TypeComplex:
 	'obj'
 	| 'dyn' // Dynamic (infered by compiler).
 	| 'type' // Entity type (ex. str, int, etc.).

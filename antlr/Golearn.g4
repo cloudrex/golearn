@@ -22,14 +22,29 @@ expr:
 	| OpUnary expr // Unary operation.
 	| KeyAwait expr // Await async operation.
 	| KeyInterpolation StrLiteral // String interpolation.
-	| expr KeyAs (Type | ComplexType) // Type casting.
-	| SymArgsL (Type | ComplexType) SymArgsR expr // Type casting alternative.
+	| expr KeyAs type // Type casting.
+	| SymArgsL type SymArgsR expr // Type casting alternative.
 	| SymArgsL expr SymArgsR; // Encapsulated expression within parenthesis.
+
+// Type.
+typeSimple:
+	TypeInt
+	| TypeInt64
+	| TypeLong
+	| TypeShort
+	| TypeFloat
+	| TypeDouble
+	| TypeString
+	| TypeObject
+	| TypeChar
+	| TypeBool;
+
+type: typeSimple | TypeComplex;
 
 // Variable.
 assign: idPath '=' expr;
 
-declare: Type Id '=' expr | Type Id;
+declare: type Id '=' expr | type Id;
 
 topLevelDeclare: KeyExport? declare;
 
@@ -52,33 +67,34 @@ statement:
 block: (Id ':')? SymBlockL statement* SymBlockR;
 
 // Function.
-arg: Type Id;
+arg: type Id;
 
 args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 
-fnSigArgs: SymArgsL ((Type SymComma)* Type)? SymArgsR;
+fnSigArgs: SymArgsL ((type SymComma)* type)? SymArgsR;
 
-fnSig: Id fnSigArgs (SymFnType Type)? SymEnd;
+fnSig: Id fnSigArgs (SymFnType type)? SymEnd;
 
 fn:
 	attrib* KeyFn ModifierStatic? ModifierAsync? Modifier? Id args? (
-		SymFnType Type
+		SymFnType type
 	)? block;
 
-entryFn: attrib* KeyEntry args? (SymFnType Type)? block;
+entryFn:
+	attrib* KeyEntry args? (SymFnType (TypeVoid | TypeInt))? block;
 
 fnTopLevel:
 	KeyExport? attrib* KeyFn ModifierAsync? Id args? (
-		SymFnType Type
+		SymFnType type
 	)? block;
 
-fnAnonymous: KeyFn args? (SymFnType Type)? block;
+fnAnonymous: KeyFn args? (SymFnType type)? block;
 
 // Attribute.
 attrib: SymAttribute Id args?;
 
 // Struct.
-structEntry: Id ':' Type SymEnd;
+structEntry: Id ':' type SymEnd;
 
 strct: KeyExport? KeyStruct Id SymBlockL structEntry* SymBlockR;
 
@@ -141,5 +157,4 @@ goto: KeyGoto Id;
 // Enum.
 enumEntry: Id ':' atom;
 
-enum:
-	KeyEnum Id (KeyExtends Type)? SymBlockL enumEntry* SymBlockR;
+enum: KeyEnum Id (KeyExtends)? SymBlockL enumEntry* SymBlockR;
