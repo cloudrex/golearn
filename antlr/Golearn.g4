@@ -24,7 +24,11 @@ arg: Type '*'? Id;
 
 args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 
-statement: expr SymEnd | fnx;
+statement:
+	expr SymEnd
+	| fnx SymEnd // Anonymous function.
+	| declare SymEnd // Variable declaration.
+	| assign SymEnd; // Variable assignment.
 
 block: SymBlockL statement* SymBlockR;
 
