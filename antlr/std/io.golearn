@@ -1,0 +1,19 @@
+space std.io;
+
+extern puts(str) ~> int;
+extern printf(str) ~> int;
+
+/*
+	Print text in the console.
+*/
+exp fn write(str text) ~> void {
+	printf(text);
+}
+
+/*
+	Print text followed by a new line
+	in the console.
+*/
+exp fn ln(str text) ~> void {
+	puts(text);
+}

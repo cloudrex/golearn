@@ -1,3 +1,0 @@
-extern printf(str) ~> int;
-
-space std;
