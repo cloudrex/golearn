@@ -22,7 +22,7 @@ func newGolearnListener() golearnListener {
 }
 
 func (s *golearnListener) EnterAssign(ctx *parser.AssignContext) {
-	//
+	// TODO
 }
 
 func (s *golearnListener) EnterExtern(ctx *parser.ExternContext) {

@@ -32,7 +32,7 @@ statement:
 
 block: SymBlockL statement* SymBlockR;
 
-fn: attrib* KeyFn Id args? (SymFnType Type)? block;
+fn: attrib* KeyFn Modifier? Id args? (SymFnType Type)? block;
 
 // Anonymous function.
 fnx: KeyFnx args? (SymFnType Type)? block;
@@ -43,7 +43,10 @@ structEntry: Id ':' Type SymEnd;
 
 strct: KeyStruct Id SymBlockL structEntry* SymBlockR;
 
-class: KeyClass Id block;
+constructor: Modifier? Id args block;
+
+class:
+	attrib* KeyClass Generic? Extends? Implements* Id SymBlockL constructor? fn* SymBlockR;
 
 objLiteralEntry: Id ':' expr;
 
@@ -58,3 +61,14 @@ extern: KeyExtern Id externArgs (SymFnType Type)? SymEnd;
 atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
 idPath: Id ('.' Id)*;
+
+if: KeyIf SymArgsL expr SymArgsR block;
+
+elseif: KeyElseIf SymArgsL expr SymArgsR block;
+
+else: (if | elseif) KeyElse SymArgsL expr SymArgsR;
+
+for:
+	KeyFor SymArgsL expr SymEnd expr SymEnd expr SymArgsR block;
+
+while: KeyWhile SymArgsL expr SymArgsR block;

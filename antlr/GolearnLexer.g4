@@ -26,6 +26,10 @@ KeyConst: 'const';
 KeyFnx: 'fnx';
 KeyNew: 'new';
 KeyExtern: 'extern';
+KeyIf: 'if';
+KeyElse: 'else';
+KeyElseIf: 'elseif';
+KeyWhile: 'while';
 
 // Symbols.
 SymAttribute: '@';
@@ -52,6 +56,14 @@ SymBracketR: ']';
 
 SymSpread: '..';
 
+IdList: (Id ',')* Id;
+
+Generic: '<' IdList '>';
+
+Implements: 'implements' IdList;
+
+Extends: ':' Id;
+
 // Operators.
 OpBin:
 	'*'
@@ -71,7 +83,9 @@ OpBin:
 OpUnary: '-' | '!';
 
 // Other.
-FnModifier: 'pub' | 'prot' | 'priv';
+Modifier: 'pub' | 'priv' | 'prot';
+
+ModifierPlusStatic: 'static' Modifier;
 
 Type:
 	'int'
