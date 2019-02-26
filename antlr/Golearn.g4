@@ -20,7 +20,7 @@ expr:
 	| OpUnary expr // Unary operation.
 	| SymArgsL expr SymArgsR;
 
-arg: Type '*'? Id;
+arg: Type Id;
 
 args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 

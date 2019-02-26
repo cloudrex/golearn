@@ -84,7 +84,8 @@ Type:
 	| 'obj'
 	| 'char'
 	| 'dyn'
-	| 'bool';
+	| 'bool'
+	| '*' Type;
 
 FnReturnType: Type | 'void';
 
