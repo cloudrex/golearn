@@ -51,8 +51,6 @@ func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 
 	// Apply the required return instruction.
 	body.NewRet(nil)
-
-	fmt.Println("--- LLVM IR ---\n", s.mod)
 }
 
 // ResolveType : Resolve the corresponding LLVM type from a string value.
@@ -61,23 +59,25 @@ func ResolveType(value string) types.Type {
 }
 
 func main() {
-	// Setup the input
-	is := antlr.NewInputStream("space test ; @attrib @attrib() fn main(*str myArg, str mySecond) ~> float { myStr = 5; som.eth.ing = 6; }")
+	// Setup the input.
+	is := antlr.NewInputStream("space test ; @attrib @attrib() fn main(str myArg, str mySecond) ~> float { myStr = 5; som.eth.ing = 6; }")
 
-	// Create the Lexer
+	// Create the Lexer.
 	lexer := parser.NewGolearnLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-	// Create the Parser
+	// Create the Parser.
 	p := parser.NewGolearnParser(stream)
 
-	// Finally parse the expression
+	// Finally parse the expression.
 	listener := newGolearnListener()
 
 	antlr.ParseTreeWalkerDefault.Walk(&listener, p.Start())
 
 	// Ensure entry point exists.
 	if !listener.mainExists {
-		fmt.Println("No entry point found")
+		panic("No entry point found")
 	}
+
+	fmt.Println("--- LLVM IR ---\n", listener.mod)
 }
