@@ -6,6 +6,10 @@ Whitespace: [ \r\n\t]+ -> skip;
 StrLiteral: '"' [^\\"]* '"';
 CharLiteral: '\'' [a-zA-Z]? '\'';
 
+// Comments.
+CommentSingle: '//' [^\n]* -> skip;
+CommentMulti: '/*' [^(*/)] '*/' -> skip;
+
 // Keywords.
 KeyFn: 'fn';
 KeyDelete: 'delete';
@@ -23,7 +27,6 @@ KeyNil: 'nil';
 KeyStatic: 'stat';
 KeyAsync: 'async';
 KeyConst: 'const';
-KeyFnx: 'fnx';
 KeyNew: 'new';
 KeyExtern: 'extern';
 KeyIf: 'if';

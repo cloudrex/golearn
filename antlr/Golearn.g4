@@ -39,7 +39,7 @@ args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 
 statement:
 	expr SymEnd
-	| fnx SymEnd // Anonymous function.
+	| fnAnonymous SymEnd // Anonymous function.
 	| declare SymEnd // Variable declaration.
 	| assign SymEnd // Variable assignment.
 	| goto SymEnd // Goto labeled-block statement.
@@ -65,7 +65,7 @@ topLevelFn:
 	)? block;
 
 // Anonymous function.
-fnx: KeyFnx args? (SymFnType Type)? block;
+fnAnonymous: KeyFn args? (SymFnType Type)? block;
 
 attrib: SymAttribute Id args?;
 
@@ -86,7 +86,7 @@ objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
-extern: KeyExtern fnSig;
+extern: KeyExport? KeyExtern fnSig;
 
 atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
