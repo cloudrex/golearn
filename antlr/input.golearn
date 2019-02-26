@@ -2,7 +2,7 @@ space test;
 
 @attrib
 @attrib()
-fn main(str myArg, str mySecond) ~> float {
+fn main(str myArg, str mySecond) {
     myStr = 5;
     som.eth.ing = 6;
 }
