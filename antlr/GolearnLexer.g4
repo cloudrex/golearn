@@ -47,6 +47,9 @@ KeyExtends: 'ext';
 KeyThis: 'this';
 KeyFrom: 'from';
 KeyEntry: 'entry';
+KeyAs: 'as';
+KeyExit: 'exit';
+KeyInterpolation: '$';
 
 // Symbols.
 SymAttribute: '@';

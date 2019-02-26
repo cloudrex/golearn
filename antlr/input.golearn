@@ -29,6 +29,7 @@ exp fn intercept( Attribute attribute, attaAttrTarget target ) {
 
 // Class declaration.
 class Dog impl ITalkable {
+	// Class instance member.
 	prot EventHub hub;
 
 	// Attribute.
@@ -51,7 +52,7 @@ fn sayHello {
 }
 
 // Entry point.
-entry ~> int {
+entry (..string[] args) ~> int {
 	// Invoke the sayHello function.
 	sayHello();
 	

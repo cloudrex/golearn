@@ -28,6 +28,9 @@ expr:
 	| expr OpBin expr // Binary operation.
 	| OpUnary expr // Unary operation.
 	| KeyAwait expr // Await async operation.
+	| KeyInterpolation StrLiteral // String interpolation.
+	| expr KeyAs (Type | ComplexType) // Type casting.
+	| SymArgsL (Type | ComplexType) SymArgsR expr // Type casting alternative.
 	| SymArgsL expr SymArgsR; // Encapsulated expression within parenthesis.
 
 arg: Type Id;
@@ -40,6 +43,7 @@ statement:
 	| declare SymEnd // Variable declaration.
 	| assign SymEnd // Variable assignment.
 	| goto SymEnd // Goto labeled-block statement.
+	| KeyExit expr SymEnd // Exit statement.
 	| KeyReturn expr? SymEnd; // Function return.
 
 block: (Id ':')? SymBlockL statement* SymBlockR;
