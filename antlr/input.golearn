@@ -1,35 +1,45 @@
-import path.to.file;
+// Import statement.
+import std.Reflection;
+import std.Attr.*;
+import std.Sys;
+import std.Event.EventHub;
+import std.Time;
 
-// External function declaration.
-ext printf( str ) ~> int ;
+space example;
 
-// Namespace.
-space test;
+// External method declaration.
+extern printf( str ) ~> void ;
 
 // Interface declaration.
 iface ITalkable {
-	fn talk( ) ~> str ;
+	// Function signature.
+	fn talk ( ) ~> str ;
 }
 
-@attrib
-struct Animal {
+// Enum declaration.
+enum DogEvent {
+	Talk
 }
 
-@attrib
-class Dog : Animal impl ITalkable {
-	fn talk( ) ~> str {
+@attr( AttrScope.Fn )
+exp fn intercept(Attribute attribute, attaAttrTarget target) {
+	Sys.ln("Target function call intercepted");
+}
+
+// Class declaration.
+class Dog impl ITalkable {
+	prot EventHub hub;
+
+	// Attribute.
+	@intercept();
+	pub stat fn getName( ) ~> str {
+		ret "Buddy";
+	}
+
+	pub fn talk ( ) ~> str {
+		this.hub.dispatch(DogEvent.Talk, Time.now());
+	
+		// Return string literal.
 		ret "Woof woof!";
 	}
-}
-
-@attrib
-@attrib()
-exp fn main( str myArg, str mySecond ) ~> int {
-    int five = 5 ;
-	
-    & som.eth.ing = 6 ;
-	
-	test();
-	
-	ret 0 ;
 }

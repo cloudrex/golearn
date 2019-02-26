@@ -40,6 +40,11 @@ KeyContinue: 'continue';
 KeyAwait: 'await';
 KeyTest: 'test';
 KeyInterface: 'iface';
+KeyGoto: 'goto';
+KeyTypeOf: 'typeof';
+KeyEnum: 'enum';
+KeyExtends: 'ext';
+KeyThis: 'this';
 
 // Symbols.
 SymAttribute: '@';
@@ -57,7 +62,7 @@ SymSpread: '..';
 IdList: (Id ',')* Id;
 Generic: '<' IdList '>';
 Implements: 'impl' IdList;
-Extends: 'ext' Id;
+Extends: KeyExtends Id;
 
 // Operators.
 OpBin:
@@ -94,9 +99,14 @@ Type:
 	| 'str'
 	| 'obj'
 	| 'char'
+	| 'bool';
+
+ComplexType:
+	'obj'
 	| 'dyn' // Dynamic (infered by compiler).
-	| 'bool'
-	| 'ref'; // Function reference.
-// TODO | '*' Type; Also, missing 'void' type.
+	| 'type' // Entity type (ex. str, int, etc.).
+	| 'ref';
+
+// Function reference. TODO | '*' Type; Also, missing 'void' type.
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;

@@ -22,6 +22,7 @@ namespace: KeyNamespace Id SymEnd;
 
 expr:
 	atom
+	| KeyTypeOf expr // Type extraction.
 	| Id args // Function call.
 	| KeyNew Id args // Class creation.
 	| expr OpBin expr // Binary operation.
@@ -38,9 +39,10 @@ statement:
 	| fnx SymEnd // Anonymous function.
 	| declare SymEnd // Variable declaration.
 	| assign SymEnd // Variable assignment.
-	| KeyReturn expr?; // Function return.
+	| goto SymEnd // Goto labeled-block statement.
+	| KeyReturn expr? SymEnd; // Function return.
 
-block: SymBlockL statement* SymBlockR;
+block: (Id ':')? SymBlockL statement* SymBlockR;
 
 fnSigArgs: SymArgsL ((Type SymComma)* Type)? SymArgsR;
 
@@ -107,3 +109,10 @@ switch:
 	KeySwitch SymArgsL expr SymArgsR SymBlockL (
 		KeyCase expr ':' caseBlock
 	) (KeyDefault ':' caseBlock)?;
+
+goto: KeyGoto Id;
+
+enumEntry: Id ':' atom;
+
+enum:
+	KeyEnum Id (KeyExtends Type)? SymBlockL enumEntry* SymBlockR;
