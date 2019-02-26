@@ -59,8 +59,16 @@ func ResolveType(value string) types.Type {
 }
 
 func main() {
+	const inputFile = "input.golearn"
+
+	if !DoesFilePathExist(inputFile) {
+		panic(fmt.Errorf("Input file '%v' does not exist", inputFile))
+	}
+
+	input := Read(inputFile)
+
 	// Setup the input.
-	is := antlr.NewInputStream("space test ; @attrib @attrib() fn main(str myArg, str mySecond) ~> float { myStr = 5; som.eth.ing = 6; }")
+	is := antlr.NewInputStream(input)
 
 	// Create the Lexer.
 	lexer := parser.NewGolearnLexer(is)
