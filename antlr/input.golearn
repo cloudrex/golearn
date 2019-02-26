@@ -5,6 +5,7 @@ import std.io;
 import std.event.EventHub;
 import std.time;
 
+// Define namespace.
 space example;
 
 // External method declaration.
@@ -44,13 +45,22 @@ class Dog impl ITalkable {
 	}
 }
 
+// Bare-bones function declaration.
+fn sayHello {
+	io.ln("Hello world!");
+}
+
 // Entry point.
-entry ( ) ~> int {
+entry ~> int {
+	// Invoke the sayHello function.
+	sayHello();
+	
 	// Create an instance of Dog.
 	Dog dog = new Dog();
 	
 	// Make the dog talk.
 	io.ln( dog.talk() );
-
+	
+	// Return and end the program.
 	ret 0;
 }
