@@ -1,8 +1,12 @@
+import path.to.file;
+
+// External function declaration.
 ext printf( str ) ~> int ;
 
+// Namespace.
 space test;
 
-@attrib
+// Interface declaration.
 iface ITalkable {
 	fn talk( ) ~> str ;
 }

@@ -25,7 +25,7 @@ KeyAsync: 'async';
 KeyConst: 'const';
 KeyFnx: 'fnx';
 KeyNew: 'new';
-KeyExtern: 'ext';
+KeyExtern: 'extern';
 KeyIf: 'if';
 KeyElse: 'else';
 KeyElseIf: 'elseif';
