@@ -2,11 +2,19 @@ grammar Golearn;
 import GolearnLexer;
 
 // Entry.
-start: imprt* extern* namespace (strct | class | fn)* EOF;
+start:
+	imprt* extern* namespace (
+		strct
+		| class
+		| topLevelFn
+		| topLevelDeclare
+	)* EOF;
 
 assign: idPath '=' expr;
 
 declare: Type Id '=' expr | Type Id;
+
+topLevelDeclare: KeyExport? declare;
 
 imprt: KeyImport Id SymEnd;
 
@@ -18,7 +26,8 @@ expr:
 	| KeyNew Id args // Class creation.
 	| expr OpBin expr // Binary operation.
 	| OpUnary expr // Unary operation.
-	| SymArgsL expr SymArgsR;
+	| KeyAwait expr // Await async operation.
+	| SymArgsL expr SymArgsR; // Encapsulated expression within parenthesis.
 
 arg: Type Id;
 
@@ -28,11 +37,20 @@ statement:
 	expr SymEnd
 	| fnx SymEnd // Anonymous function.
 	| declare SymEnd // Variable declaration.
-	| assign SymEnd; // Variable assignment.
+	| assign SymEnd // Variable assignment.
+	| KeyReturn expr?; // Function return.
 
 block: SymBlockL statement* SymBlockR;
 
-fn: attrib* KeyFn Modifier? Id args? (SymFnType Type)? block;
+fn:
+	attrib* KeyFn ModifierStatic? ModifierAsync? Modifier? Id args? (
+		SymFnType Type
+	)? block;
+
+topLevelFn:
+	KeyExport? attrib* KeyFn ModifierAsync? Id args? (
+		SymFnType Type
+	)? block;
 
 // Anonymous function.
 fnx: KeyFnx args? (SymFnType Type)? block;
@@ -41,20 +59,19 @@ attrib: SymAttribute Id args?;
 
 structEntry: Id ':' Type SymEnd;
 
-strct: KeyStruct Id SymBlockL structEntry* SymBlockR;
+strct: KeyExport? KeyStruct Id SymBlockL structEntry* SymBlockR;
 
 constructor: Modifier? Id args block;
 
 class:
-	attrib* KeyClass Generic? Extends? Implements* Id SymBlockL constructor? fn* SymBlockR;
+	attrib* KeyExport? KeyClass Generic? Extends? Implements* Id SymBlockL constructor? fn*
+		SymBlockR;
 
 objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
-externArgs:
-	SymArgsL (Type SymComma)* Type SymArgsR
-	| SymArgsL SymArgsR;
+externArgs: SymArgsL ((Type SymComma)* Type)? SymArgsR;
 
 extern: KeyExtern Id externArgs (SymFnType Type)? SymEnd;
 
@@ -64,11 +81,24 @@ idPath: Id ('.' Id)*;
 
 if: KeyIf SymArgsL expr SymArgsR block;
 
-elseif: KeyElseIf SymArgsL expr SymArgsR block;
+elseIf: KeyElseIf SymArgsL expr SymArgsR block;
 
-else: (if | elseif) KeyElse SymArgsL expr SymArgsR;
+else: (if | elseIf) KeyElse SymArgsL expr SymArgsR;
+
+loopBlock: block | KeyBreak SymEnd | KeyContinue SymEnd;
 
 for:
-	KeyFor SymArgsL expr SymEnd expr SymEnd expr SymArgsR block;
+	KeyFor SymArgsL expr SymEnd expr SymEnd expr SymArgsR loopBlock;
 
-while: KeyWhile SymArgsL expr SymArgsR block;
+whileHeader: KeyWhile SymArgsL expr SymArgsR;
+
+while: whileHeader loopBlock;
+
+doWhile: KeyDo SymArgsL expr SymArgsR loopBlock whileHeader;
+
+caseBlock: block | KeyBreak SymEnd;
+
+switch:
+	KeySwitch SymArgsL expr SymArgsR SymBlockL (
+		KeyCase expr ':' caseBlock
+	) (KeyDefault ':' caseBlock)?;

@@ -4,7 +4,13 @@ space test;
 
 @attrib
 @attrib()
-fn main(str myArg, str mySecond) {
-    myStr = 5;
+exp fn main( str myArg, str mySecond ) ~> int {
+    int five = 5;
+	
     som.eth.ing = 6;
+	
+	ret 0;
+}
+
+fn test() ~ {
 }

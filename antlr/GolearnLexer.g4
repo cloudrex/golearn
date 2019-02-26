@@ -30,6 +30,14 @@ KeyIf: 'if';
 KeyElse: 'else';
 KeyElseIf: 'elseif';
 KeyWhile: 'while';
+KeyExport: 'exp';
+KeyDo: 'do';
+KeySwitch: 'switch';
+KeyCase: 'case';
+KeyDefault: 'default';
+KeyBreak: 'break';
+KeyContinue: 'continue';
+KeyAwait: 'await';
 
 // Symbols.
 SymAttribute: '@';
@@ -85,7 +93,9 @@ OpUnary: '-' | '!';
 // Other.
 Modifier: 'pub' | 'priv' | 'prot';
 
-ModifierPlusStatic: 'static' Modifier;
+ModifierStatic: 'static';
+
+ModifierAsync: 'async';
 
 Type:
 	'int'
