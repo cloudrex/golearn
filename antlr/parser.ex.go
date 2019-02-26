@@ -22,9 +22,7 @@ func newGolearnListener() golearnListener {
 }
 
 func (s *golearnListener) EnterAssign(ctx *parser.AssignContext) {
-	id := ctx.Id()
-
-	fmt.Println("Id:", id)
+	//
 }
 
 func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
@@ -45,7 +43,14 @@ func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 		returnType = ResolveType(ctx.Type().GetSymbol().GetText())
 	}
 
-	s.mod.NewFunc(name, returnType)
+	// Create and register the function signature.
+	fn := s.mod.NewFunc(name, returnType)
+
+	// Create and apply the function body block.
+	body := fn.NewBlock("entry")
+
+	// Apply the required return instruction.
+	body.NewRet(nil)
 
 	fmt.Println("--- LLVM IR ---\n", s.mod)
 }
