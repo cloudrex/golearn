@@ -25,6 +25,7 @@ KeyAsync: 'async';
 KeyConst: 'const';
 KeyFnx: 'fnx';
 KeyNew: 'new';
+KeyExtern: 'extern';
 
 // Symbols.
 SymAttribute: '@';
@@ -75,7 +76,8 @@ FnModifier: 'pub' | 'prot' | 'priv';
 Type:
 	'int'
 	| 'int64'
-	| 'int32'
+	| 'long'
+	| 'short'
 	| 'float'
 	| 'double'
 	| 'str'

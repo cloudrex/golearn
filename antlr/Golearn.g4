@@ -2,7 +2,7 @@ grammar Golearn;
 import GolearnLexer;
 
 // Entry.
-start: imprt* namespace (strct | class | fn)* EOF;
+start: imprt* extern* namespace (strct | class | fn)* EOF;
 
 assign: Id '=' expr;
 
@@ -50,3 +50,5 @@ objLiteralEntry: Id ':' expr;
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
 atom: Id ('.' Id)* | NumLiteral | StrLiteral | CharLiteral;
+
+extern: KeyExtern Id args SymEnd;
