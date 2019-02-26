@@ -31,7 +31,7 @@ class Dog impl ITalkable {
 	prot EventHub hub;
 
 	// Attribute.
-	@intercept();
+	@intercept()
 	pub stat fn getName( ) ~> str {
 		ret "Buddy";
 	}
