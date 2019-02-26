@@ -57,34 +57,7 @@ func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 
 // ResolveType : Resolve the corresponding LLVM type from a string value.
 func ResolveType(value string) types.Type {
-	switch value {
-	case "short":
-		return types.I16
-
-	case "int":
-		return types.I32
-
-	case "int64":
-		return types.I64
-
-	case "long":
-		return types.I128
-
-	case "float":
-		return types.Float
-
-	case "double":
-		return types.Double
-
-	case "void":
-		return nil
-
-	case "bool":
-		return types.I1
-
-	default:
-		panic(fmt.Errorf("Cannot resolve unknown type value: %v", value))
-	}
+	return TypeMap[value]
 }
 
 func main() {
