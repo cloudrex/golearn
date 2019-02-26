@@ -1,13 +1,25 @@
 space std.io;
 
 extern puts (str) ~> int;
-extern printf (str) ~> int;
+extern printf (str, ..) ~> int;
+extern scanf(str, ..) ~> int;
 
 /*
  Print text in the console.
  */
 exp fn write (str text) ~> void {
 	printf(text);
+}
+
+/*
+ Print a question in the console and prompt
+ the user for input.
+ */
+exp fn prompt(str question) ~> str {
+	printf(str + "? ");
+	scanf("%s", &[str response]);
+	
+	ret response;
 }
 
 /*

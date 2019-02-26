@@ -53,6 +53,7 @@ KeyEntry: 'entry';
 KeyAs: 'as';
 KeyExit: 'exit';
 KeyInterpolation: '$';
+KeyUnsigned: 'unsig';
 
 // Symbols.
 SymAttribute: '@';
@@ -71,6 +72,29 @@ IdList: (Id ',')* Id;
 Generic: '<' IdList '>';
 Implements: 'impl' IdList;
 Extends: KeyExtends Id;
+
+// Types.
+TypeInt: 'int' | KeyUnsigned 'int';
+TypeInt64: 'int64' | KeyUnsigned 'int64';
+TypeLong: 'long' | KeyUnsigned 'long'; // Long integer (int128).
+
+TypeShort:
+	'short'
+	| KeyUnsigned 'short'; // Short integer (int16).
+
+TypeFloat: 'float' | KeyUnsigned 'float';
+TypeDouble: 'double' | KeyUnsigned 'double';
+TypeString: 'str';
+TypeObject: 'obj';
+TypeChar: 'char';
+TypeBool: 'bool';
+
+
+ComplexType:
+	'obj'
+	| 'dyn' // Dynamic (infered by compiler).
+	| 'type' // Entity type (ex. str, int, etc.).
+	| 'ref'; // Function reference.
 
 // Operators.
 OpBin:
@@ -96,24 +120,6 @@ Modifier: 'pub' | 'priv' | 'prot';
 ModifierStatic: 'static';
 
 ModifierAsync: 'async';
-
-Type:
-	'int'
-	| 'int64'
-	| 'long' // Long integer (int128).
-	| 'short' // Short integer (int16).
-	| 'float'
-	| 'double'
-	| 'str'
-	| 'obj'
-	| 'char'
-	| 'bool';
-
-ComplexType:
-	'obj'
-	| 'dyn' // Dynamic (infered by compiler).
-	| 'type' // Entity type (ex. str, int, etc.).
-	| 'ref';
 
 // Function reference. TODO | '*' Type; Also, missing 'void' type.
 
