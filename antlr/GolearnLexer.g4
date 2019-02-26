@@ -24,6 +24,7 @@ KeyStatic: 'stat';
 KeyAsync: 'async';
 KeyConst: 'const';
 KeyFnx: 'fnx';
+KeyNew: 'new';
 
 // Symbols.
 SymAttribute: '@';
@@ -86,5 +87,3 @@ Type:
 FnReturnType: Type | 'void';
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;
-
-Atom: Id | NumLiteral | StrLiteral | CharLiteral;

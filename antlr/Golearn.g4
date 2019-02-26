@@ -13,9 +13,11 @@ imprt: KeyImport Id SymEnd;
 namespace: KeyNamespace Id SymEnd;
 
 expr:
-	Atom
-	| Atom OpBin Atom
-	| OpUnary Atom
+	atom
+	| Id args // Function call.
+	| KeyNew Id args // Class creation.
+	| expr OpBin expr // Binary operation.
+	| OpUnary expr // Unary operation.
 	| SymArgsL expr SymArgsR;
 
 arg: Type '*'? Id;
@@ -38,3 +40,9 @@ structEntry: Id ':' Type SymEnd;
 strct: KeyStruct Id SymBlockL structEntry* SymBlockR;
 
 class: KeyClass Id block;
+
+objLiteralEntry: Id ':' expr;
+
+objLiteral: SymBlockL objLiteralEntry SymBlockR;
+
+atom: Id ('.' Id)* | NumLiteral | StrLiteral | CharLiteral;
