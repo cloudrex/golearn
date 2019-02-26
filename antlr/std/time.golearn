@@ -1,0 +1,6 @@
+space std.time;
+
+/*
+ Delay the program's execution.
+ */
+exp extern sleep(unsig int seconds) ~> unsig int;

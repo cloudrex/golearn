@@ -54,6 +54,7 @@ KeyAs: 'as';
 KeyExit: 'exit';
 KeyInterpolation: '$';
 KeyUnsigned: 'unsig';
+KeyDirective: '#';
 
 // Symbols.
 SymAttribute: '@';

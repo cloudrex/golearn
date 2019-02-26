@@ -1,13 +1,13 @@
 space std.io;
 
-extern puts (str) ~> int;
-extern printf (str, ..) ~> int;
+extern puts(str) ~> int;
+extern printf(str, ..) ~> int;
 extern scanf(str, ..) ~> int;
 
 /*
  Print text in the console.
  */
-exp fn write (str text) ~> void {
+exp fn write(str text) ~> void {
 	printf(text);
 }
 
@@ -25,6 +25,6 @@ exp fn prompt(str question) ~> str {
 /*
  Print text followed by a new line in the console.
  */
-exp fn ln (str text) ~> void {
+exp fn ln(str text) ~> void {
 	puts(text);
 } 

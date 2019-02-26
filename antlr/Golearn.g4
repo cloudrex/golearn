@@ -3,7 +3,7 @@ import GolearnLexer;
 
 // Entry.
 start:
-	imprt* extern* namespace entryFn (
+	directive* imprt* extern* namespace entryFn (
 		strct
 		| class
 		| fnTopLevel
@@ -22,8 +22,7 @@ expr:
 	| OpUnary expr // Unary operation.
 	| KeyAwait expr // Await async operation.
 	| KeyInterpolation StrLiteral // String interpolation.
-	| expr KeyAs type // Type casting.
-	| SymArgsL type SymArgsR expr // Type casting alternative.
+	| SymArgsL type SymArgsR expr // Type casting.
 	| SymArgsL expr SymArgsR; // Encapsulated expression within parenthesis.
 
 // Type.
@@ -117,7 +116,8 @@ objLiteralEntry: Id ':' expr;
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
 // External declaration.
-extern: KeyExport? KeyExtern fnSig;
+extern:
+	KeyExport? (SymArgsL KeyAs Id SymArgsR)? KeyExtern fnSig;
 
 // If statement.
 if: KeyIf SymArgsL expr SymArgsR block;
@@ -158,3 +158,6 @@ goto: KeyGoto Id;
 enumEntry: Id ':' atom;
 
 enum: KeyEnum Id (KeyExtends)? SymBlockL enumEntry* SymBlockR;
+
+// Directive.
+directive: KeyDirective Id (Id | StrLiteral);
