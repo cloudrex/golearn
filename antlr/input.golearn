@@ -1,16 +1,31 @@
-extern printf(str) ~> int;
+ext printf( str ) ~> int ;
 
 space test;
 
 @attrib
-@attrib()
-exp fn main( str myArg, str mySecond ) ~> int {
-    int five = 5;
-	
-    som.eth.ing = 6;
-	
-	ret 0;
+iface ITalkable {
+	fn talk( ) ~> str ;
 }
 
-fn test() ~ {
+@attrib
+struct Animal {
+}
+
+@attrib
+class Dog : Animal impl ITalkable {
+	fn talk( ) ~> str {
+		ret "Woof woof!";
+	}
+}
+
+@attrib
+@attrib()
+exp fn main( str myArg, str mySecond ) ~> int {
+    int five = 5 ;
+	
+    & som.eth.ing = 6 ;
+	
+	test();
+	
+	ret 0 ;
 }

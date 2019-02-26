@@ -25,7 +25,7 @@ KeyAsync: 'async';
 KeyConst: 'const';
 KeyFnx: 'fnx';
 KeyNew: 'new';
-KeyExtern: 'extern';
+KeyExtern: 'ext';
 KeyIf: 'if';
 KeyElse: 'else';
 KeyElseIf: 'elseif';
@@ -38,39 +38,26 @@ KeyDefault: 'default';
 KeyBreak: 'break';
 KeyContinue: 'continue';
 KeyAwait: 'await';
+KeyTest: 'test';
+KeyInterface: 'iface';
 
 // Symbols.
 SymAttribute: '@';
-
 SymFnType: '~>';
-
 SymEnd: ';';
-
 SymBlockL: '{';
-
 SymBlockR: '}';
-
 SymArgsL: '(';
-
 SymArgsR: ')';
-
 SymComma: ',';
-
 SymArray: '[]';
-
 SymBracketL: '[';
-
 SymBracketR: ']';
-
 SymSpread: '..';
-
 IdList: (Id ',')* Id;
-
 Generic: '<' IdList '>';
-
-Implements: 'implements' IdList;
-
-Extends: ':' Id;
+Implements: 'impl' IdList;
+Extends: 'ext' Id;
 
 // Operators.
 OpBin:
@@ -100,15 +87,16 @@ ModifierAsync: 'async';
 Type:
 	'int'
 	| 'int64'
-	| 'long'
-	| 'short'
+	| 'long' // Long integer (int128).
+	| 'short' // Short integer (int16).
 	| 'float'
 	| 'double'
 	| 'str'
 	| 'obj'
 	| 'char'
-	| 'dyn'
-	| 'bool';
+	| 'dyn' // Dynamic (infered by compiler).
+	| 'bool'
+	| 'ref'; // Function reference.
 // TODO | '*' Type; Also, missing 'void' type.
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;

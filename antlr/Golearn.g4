@@ -42,6 +42,10 @@ statement:
 
 block: SymBlockL statement* SymBlockR;
 
+fnSigArgs: SymArgsL ((Type SymComma)* Type)? SymArgsR;
+
+fnSig: Id fnSigArgs (SymFnType Type)? SymEnd;
+
 fn:
 	attrib* KeyFn ModifierStatic? ModifierAsync? Modifier? Id args? (
 		SymFnType Type
@@ -67,13 +71,14 @@ class:
 	attrib* KeyExport? KeyClass Generic? Extends? Implements* Id SymBlockL constructor? fn*
 		SymBlockR;
 
+interface:
+	attrib* KeyExport? KeyInterface Id Implements SymBlockL SymBlockR;
+
 objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
-externArgs: SymArgsL ((Type SymComma)* Type)? SymArgsR;
-
-extern: KeyExtern Id externArgs (SymFnType Type)? SymEnd;
+extern: KeyExtern fnSig;
 
 atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
