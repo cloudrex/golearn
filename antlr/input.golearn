@@ -14,7 +14,7 @@ extern printf( str ) ~> void ;
 // Interface declaration.
 iface ITalkable {
 	// Function signature.
-	fn talk ( ) ~> str ;
+	talk ( ) ~> str ;
 }
 
 // Enum declaration.

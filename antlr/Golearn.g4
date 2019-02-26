@@ -80,7 +80,7 @@ class:
 		SymBlockR;
 
 interface:
-	attrib* KeyExport? KeyInterface Id Implements SymBlockL SymBlockR;
+	attrib* KeyExport? KeyInterface Id Implements SymBlockL fnSig* SymBlockR;
 
 objLiteralEntry: Id ':' expr;
 
