@@ -15,6 +15,7 @@ atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
 expr:
 	atom
+	| declareInline // Inline declaration.
 	| KeyTypeOf expr // Type extraction.
 	| Id args // Function call.
 	| KeyNew Id args // Class creation.
@@ -44,6 +45,8 @@ type: typeSimple | TypeComplex;
 assign: idPath '=' expr;
 
 declare: type Id '=' expr | type Id;
+
+declareInline: SymBracketL declare SymBracketR;
 
 topLevelDeclare: KeyExport? declare;
 
