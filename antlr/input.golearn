@@ -53,6 +53,9 @@ fn sayHello {
 
 // Entry point.
 entry (..string[] args) ~> int {
+	// String interpolation.
+	io.ln($"Program started with {args.len} arguments");
+
 	// Invoke the sayHello function.
 	sayHello();
 	
