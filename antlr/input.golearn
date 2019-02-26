@@ -1,4 +1,4 @@
-extern printf( str ) ~> int;
+extern printf(str) ~> int;
 
 space test;
 
