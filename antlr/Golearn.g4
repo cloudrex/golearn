@@ -3,7 +3,7 @@ import GolearnLexer;
 
 // Entry.
 start:
-	imprt* extern* namespace (
+	imprt* extern* namespace entryFn (
 		strct
 		| class
 		| topLevelFn
@@ -52,6 +52,8 @@ fn:
 	attrib* KeyFn ModifierStatic? ModifierAsync? Modifier? Id args? (
 		SymFnType Type
 	)? block;
+
+entryFn: attrib* KeyEntry args? (SymFnType Type)? block;
 
 topLevelFn:
 	KeyExport? attrib* KeyFn ModifierAsync? Id args? (

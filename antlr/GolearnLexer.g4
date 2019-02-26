@@ -45,6 +45,8 @@ KeyTypeOf: 'typeof';
 KeyEnum: 'enum';
 KeyExtends: 'ext';
 KeyThis: 'this';
+KeyFrom: 'from';
+KeyEntry: 'entry';
 
 // Symbols.
 SymAttribute: '@';
