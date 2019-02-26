@@ -49,8 +49,8 @@ objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
+extern: KeyExtern Id args (SymFnType FnReturnType)? SymEnd;
+
 atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
 idPath: Id ('.' Id)*;
-
-extern: KeyExtern Id args SymEnd;

@@ -49,8 +49,9 @@ func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 	// Create and apply the function body block.
 	body := fn.NewBlock("entry")
 
-	// TODO
+	// Create and apply block statements.
 	for _, statement := range ctx.Block().(*parser.BlockContext).AllStatement() {
+		// TODO: Debugging
 		fmt.Println("Statement:", statement)
 		fmt.Println("Assign:", statement.(*parser.StatementContext).Assign().(*parser.AssignContext))
 	}
