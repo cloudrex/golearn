@@ -1,4 +1,4 @@
-extern puts() ~> void;
+extern printf( str ) ~> int;
 
 space test;
 

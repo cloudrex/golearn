@@ -85,8 +85,6 @@ Type:
 	| 'char'
 	| 'dyn'
 	| 'bool';
-// TODO | '*' Type;
-
-FnReturnType: Type | 'void';
+// TODO | '*' Type; Also, missing 'void' type.
 
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;

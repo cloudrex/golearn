@@ -25,6 +25,17 @@ func (s *golearnListener) EnterAssign(ctx *parser.AssignContext) {
 	//
 }
 
+func (s *golearnListener) EnterExtern(ctx *parser.ExternContext) {
+	var returnType types.Type
+
+	if ctx.Type() != nil {
+		returnType = ResolveType(ctx.Type().GetSymbol().GetText())
+	}
+
+	// Emit the function declaration without a body.
+	s.mod.NewFunc(ctx.Id().GetSymbol().GetText(), returnType)
+}
+
 func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 	name := ctx.Id().GetSymbol().GetText()
 
@@ -50,11 +61,11 @@ func (s *golearnListener) EnterFn(ctx *parser.FnContext) {
 	body := fn.NewBlock("entry")
 
 	// Create and apply block statements.
-	for _, statement := range ctx.Block().(*parser.BlockContext).AllStatement() {
+	/*for _, statement := range ctx.Block().(*parser.BlockContext).AllStatement() {
 		// TODO: Debugging
-		fmt.Println("Statement:", statement)
-		fmt.Println("Assign:", statement.(*parser.StatementContext).Assign().(*parser.AssignContext))
-	}
+		// fmt.Println("Statement:", statement)
+		// fmt.Println("Assign:", statement.(*parser.StatementContext).Assign().(*parser.AssignContext))
+	} */
 
 	// Apply the required return instruction.
 	body.NewRet(nil)

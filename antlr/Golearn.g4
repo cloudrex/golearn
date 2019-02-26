@@ -35,7 +35,7 @@ block: SymBlockL statement* SymBlockR;
 fn: attrib* KeyFn Id args? (SymFnType Type)? block;
 
 // Anonymous function.
-fnx: KeyFnx args? (SymFnType FnReturnType)? block;
+fnx: KeyFnx args? (SymFnType Type)? block;
 
 attrib: SymAttribute Id args?;
 
@@ -49,7 +49,11 @@ objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
-extern: KeyExtern Id args (SymFnType FnReturnType)? SymEnd;
+externArgs:
+	SymArgsL (Type SymComma)* Type SymArgsR
+	| SymArgsL SymArgsR;
+
+extern: KeyExtern Id externArgs (SymFnType Type)? SymEnd;
 
 atom: idPath | NumLiteral | StrLiteral | CharLiteral;
 
