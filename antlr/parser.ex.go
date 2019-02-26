@@ -89,7 +89,7 @@ func ResolveType(value string) types.Type {
 
 func main() {
 	// Setup the input
-	is := antlr.NewInputStream("space test ; @attrib @attrib() fn main(*str myArg, str mySecond) ~> float { myStr = 5; }")
+	is := antlr.NewInputStream("space test ; @attrib @attrib() fn main(*str myArg, str mySecond) ~> float { myStr = 5; som.eth.ing = 6; }")
 
 	// Create the Lexer
 	lexer := parser.NewGolearnLexer(is)

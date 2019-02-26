@@ -4,7 +4,7 @@ import GolearnLexer;
 // Entry.
 start: imprt* extern* namespace (strct | class | fn)* EOF;
 
-assign: Id '=' expr;
+assign: idPath '=' expr;
 
 declare: Type Id '=' expr | Type Id;
 
@@ -49,6 +49,8 @@ objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
-atom: Id ('.' Id)* | NumLiteral | StrLiteral | CharLiteral;
+atom: idPath | NumLiteral | StrLiteral | CharLiteral;
+
+idPath: Id ('.' Id)*;
 
 extern: KeyExtern Id args SymEnd;
