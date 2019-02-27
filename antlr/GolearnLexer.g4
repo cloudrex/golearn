@@ -15,7 +15,7 @@ KeyFn: 'fn';
 KeyDelete: 'delete';
 KeyReturn: 'ret';
 KeyYield: 'yield';
-KeyFor: 'for';
+KeyFor: forLoopr';
 KeyNamespace: 'space';
 KeyVoid: 'void';
 KeyStruct: 'struct';
@@ -29,13 +29,13 @@ KeyAsync: 'async';
 KeyConst: 'const';
 KeyNew: 'new';
 KeyExtern: 'extern';
-KeyIf: 'if';
-KeyElse: 'else';
+KeyIf: ifStatementf';
+KeyElse: elseStatemente';
 KeyElseIf: 'elseif';
 KeyWhile: 'while';
 KeyExport: 'exp';
 KeyDo: 'do';
-KeySwitch: 'switch';
+KeySwitch: switchStatementh';
 KeyCase: 'case';
 KeyDefault: 'default';
 KeyBreak: 'break';
@@ -43,7 +43,7 @@ KeyContinue: 'continue';
 KeyAwait: 'await';
 KeyTest: 'test';
 KeyInterface: 'iface';
-KeyGoto: 'goto';
+KeyGoto: gotoStatemento';
 KeyTypeOf: 'typeof';
 KeyEnum: 'enum';
 KeyExtends: 'ext';
@@ -95,10 +95,9 @@ TypeBool: 'bool';
 TypeVoid: 'void';
 
 TypeComplex:
-	'obj'
-	| 'dyn' // Dynamic (infered by compiler).
+	'dyn' // Dynamic (infered by compiler).
 	| 'type' // Entity type (ex. str, int, etc.).
-	| 'ref'; // Function reference.
+	| anyType'; // Function reference.
 
 // Operators.
 OpBin:
