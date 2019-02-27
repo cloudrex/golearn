@@ -1,5 +1,9 @@
+import std.io;
+
 space std;
 
 exp fn panic(str message) ~> void {
+	io.ln("Fatal: " + message);
+
 	exit 1;
 }

@@ -1,70 +1,11 @@
-// Import statements.
-import std.reflect;
-import std.attribute.*;
-import std.io;
-import std.event.EventHub;
-import std.time;
+extern printf();
 
-// Define namespace.
-space example;
+space golearn;
 
-// External method declaration.
-extern printf( str ) ~> void ;
-
-// Interface declaration.
-iface ITalkable {
-	// Function signature.
-	talk ( ) ~> str ;
+entry ~> void {
+	//
 }
 
-// Enum declaration.
-enum DogEvent {
-	Talk
-}
-
-@attr( AttrScope.Fn )
-exp fn intercept( Attribute attribute, attaAttrTarget target ) {
-	io.ln("Target function call intercepted");
-}
-
-// Class declaration.
-class Dog impl ITalkable {
-	// Class instance member.
-	prot EventHub hub;
-
-	// Attribute.
-	@intercept( )
-	pub stat fn getName( ) ~> str {
-		ret "Buddy";
-	}
-
-	pub fn talk ( ) ~> str {
-		this.hub.dispatch( DogEvent.Talk, time.now() );
-	
-		// Return string literal.
-		ret "Woof woof!";
-	}
-}
-
-// Bare-bones function declaration.
-fn sayHello {
-	io.ln("Hello world!");
-}
-
-// Entry point.
-entry (..string[] args) ~> int {
-	// String interpolation.
-	io.ln($"Program started with {args.len} arguments");
-
-	// Invoke the sayHello function.
-	sayHello();
-	
-	// Create an instance of Dog.
-	Dog dog = new Dog();
-	
-	// Make the dog talk.
-	io.ln( dog.talk() );
-	
-	// Return and end the program.
-	ret 0;
+fn test() ~> int {
+	int five = 5;
 }

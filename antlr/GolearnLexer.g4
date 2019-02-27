@@ -17,7 +17,6 @@ KeyReturn: 'ret';
 KeyYield: 'yield';
 KeyFor: 'for ';
 KeyNamespace: 'space';
-KeyVoid: 'void';
 KeyStruct: 'struct';
 KeyClass: 'class';
 KeyImport: 'import';
@@ -41,7 +40,6 @@ KeyDefault: 'default';
 KeyBreak: 'break';
 KeyContinue: 'continue';
 KeyAwait: 'await';
-KeyTest: 'test';
 KeyInterface: 'iface';
 KeyGoto: 'goto';
 KeyTypeOf: 'typeof';
@@ -72,26 +70,23 @@ SymArray: '[]';
 SymBracketL: '[';
 SymBracketR: ']';
 SymSpread: '..';
-IdList: (Id ',')* Id;
-Generic: '<' IdList '>';
-Implements: 'impl' IdList;
+Generic: '<' (Id ',')* Id '>';
+Implements: 'impl' (Id ',')* Id;
 Extends: KeyExtends Id;
 
 // Types.
-TypeInt: 'int' | KeyUnsigned 'int';
-TypeInt64: 'int64' | KeyUnsigned 'int64';
-TypeLong: 'long' | KeyUnsigned 'long';
-// Long integer (int128).
+TypeSimple:
+	'int'
+	| 'int64'
+	| 'long'
+	| 'short'
+	| 'float'
+	| 'double'
+	| 'str'
+	| 'obj'
+	| 'char'
+	| 'bool';
 
-TypeShort: 'short' | KeyUnsigned 'short';
-// Short integer (int16).
-
-TypeFloat: 'float' | KeyUnsigned 'float';
-TypeDouble: 'double' | KeyUnsigned 'double';
-TypeString: 'str';
-TypeObject: 'obj';
-TypeChar: 'char';
-TypeBool: 'bool';
 TypeVoid: 'void';
 
 TypeComplex:
@@ -121,7 +116,4 @@ OpUnary: '-' | '!';
 Modifier: 'pub' | 'priv' | 'prot';
 ModifierStatic: 'static';
 ModifierAsync: 'async';
-
-// Function reference. TODO | '*' Type; Also, missing 'void' type.
-
 Id: [a-zA-Z]+ [_a-zA-Z0-9]*;

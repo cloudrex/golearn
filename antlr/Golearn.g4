@@ -3,7 +3,7 @@ import GolearnLexer;
 
 // Entry.
 start:
-	directive* imprt* extern* namespace entryFn (
+	directive* imprt* extern* namespace fnEntry (
 		strct
 		| iface
 		| class
@@ -24,28 +24,18 @@ expr:
 	| OpUnary expr // Unary operation.
 	| KeyAwait expr // Await async operation.
 	| KeyInterpolation StrLiteral // String interpolation.
-	| SymArgsL anyType SymArgsR expr // Type casting.
+	| SymArgsL typeBasic SymArgsR expr // Type casting.
 	| SymArgsL expr SymArgsR; // Encapsulated expression within parenthesis.
 
 // Type.
-typeSimple:
-	TypeInt
-	| TypeInt64
-	| TypeLong
-	| TypeShort
-	| TypeFloat
-	| TypeDouble
-	| TypeString
-	| TypeObject
-	| TypeChar
-	| TypeBool;
+typeBasic: TypeSimple | TypeComplex;
 
-anyType: typeSimple | TypeComplex;
+fnReturnType: typeBasic | TypeVoid;
 
 // Variable.
 assign: idPath '=' expr;
 
-declare: anyType Id '=' expr | anyType Id;
+declare: typeBasic Id '=' expr | typeBasic Id;
 
 declareInline: SymBracketL declare SymBracketR;
 
@@ -72,34 +62,33 @@ statement:
 block: (Id ':')? SymBlockL statement* SymBlockR;
 
 // Function.
-arg: anyType Id;
+arg: typeBasic Id;
 
 args: SymArgsL (arg SymComma)* arg SymArgsR | SymArgsL SymArgsR;
 
-fnSigArgs: SymArgsL ((anyType SymComma)* anyType)? SymArgsR;
+fnSigArgs: SymArgsL ((typeBasic SymComma)* typeBasic)? SymArgsR;
 
-fnSig: Id fnSigArgs (SymFnType anyType)? SymEnd;
+fnSig: Id fnSigArgs (SymFnType typeBasic)? SymEnd;
+
+fnEntry: attrib* KeyEntry args? (SymFnType fnReturnType)? block;
 
 fn:
 	attrib* KeyFn ModifierStatic? ModifierAsync? Modifier? Id args? (
-		SymFnType anyType
+		SymFnType fnReturnType
 	)? block;
-
-entryFn:
-	attrib* KeyEntry args? (SymFnType (TypeVoid | TypeInt))? block;
 
 fnTopLevel:
 	KeyExport? attrib* KeyFn ModifierAsync? Id args? (
-		SymFnType anyType
+		SymFnType fnReturnType
 	)? block;
 
-fnAnonymous: KeyFn args? (SymFnType anyType)? block;
+fnAnonymous: KeyFn args? (SymFnType typeBasic)? block;
 
 // Attribute.
 attrib: SymAttribute Id args?;
 
 // Struct.
-structEntry: Id ':' anyType SymEnd;
+structEntry: Id ':' typeBasic SymEnd;
 
 strct: KeyExport? KeyStruct Id SymBlockL structEntry* SymBlockR;
 
@@ -114,16 +103,13 @@ class:
 iface:
 	attrib* KeyExport? KeyInterface Id Implements SymBlockL fnSig* SymBlockR;
 
-// Object.
-idPath: Id ('.' Id)*;
-
 objLiteralEntry: Id ':' expr;
 
 objLiteral: SymBlockL objLiteralEntry SymBlockR;
 
 // External declaration.
 extern:
-	KeyExport? (SymArgsL KeyAs Id SymArgsR)? KeyExtern fnSig;
+	KeyExport? KeyExtern (SymArgsL KeyAs Id SymArgsR)? fnSig;
 
 // If statement.
 ifStatement: KeyIf SymArgsL expr SymArgsR block;
@@ -169,4 +155,7 @@ enum: KeyEnum Id (KeyExtends)? SymBlockL enumEntry* SymBlockR;
 directive: KeyDirective Id (Id | StrLiteral);
 
 // Definition/alias.
-def: KeyDef Id '=' (anyType (('|' | '&') anyType)*);
+def: KeyDef Id '=' (typeBasic (('|' | '&') typeBasic)*);
+
+// Object.
+idPath: Id ('.' Id)*;
