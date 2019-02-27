@@ -64,7 +64,9 @@ statement:
 	| assign SymEnd // Variable assignment.
 	| goto SymEnd // Goto labeled-block statement.
 	| KeyExit expr SymEnd // Exit statement.
-	| KeyReturn expr? SymEnd; // Function return.
+	| KeyReturn expr? SymEnd // Function return.
+	| KeyAssert expr SymEnd // Assert statement.
+	| KeyThrow expr SymEnd; // Throw statement.
 
 block: (Id ':')? SymBlockL statement* SymBlockR;
 
@@ -165,5 +167,5 @@ enum: KeyEnum Id (KeyExtends)? SymBlockL enumEntry* SymBlockR;
 // Directive.
 directive: KeyDirective Id (Id | StrLiteral);
 
-// Definitions/aliases.
+// Definition/alias.
 def: KeyDef Id '=' (type (('|' | '&') type)*);

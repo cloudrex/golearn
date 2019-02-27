@@ -1,1 +1,12 @@
 space std.math;
+
+/*
+ Returns the absolute value of a number.
+ */
+exp fn abs(int num) ~> int {
+	if (num < 0) {
+		ret -num;
+	}
+	
+	ret num;
+}

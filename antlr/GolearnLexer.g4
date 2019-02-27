@@ -56,6 +56,8 @@ KeyInterpolation: '$';
 KeyUnsigned: 'unsig';
 KeyDirective: '#';
 KeyDef: 'def';
+KeyThrow: 'throw';
+KeyAssert: 'assert';
 
 // Symbols.
 SymAttribute: '@';

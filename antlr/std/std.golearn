@@ -1,3 +1,5 @@
 space std;
 
-//
+exp fn panic(str message) ~> void {
+	exit 1;
+}
