@@ -164,3 +164,6 @@ enum: KeyEnum Id (KeyExtends)? SymBlockL enumEntry* SymBlockR;
 
 // Directive.
 directive: KeyDirective Id (Id | StrLiteral);
+
+// Definitions/aliases.
+def: KeyDef Id '=' (type (('|' | '&') type)*);
