@@ -15,7 +15,7 @@ KeyFn: 'fn';
 KeyDelete: 'delete';
 KeyReturn: 'ret';
 KeyYield: 'yield';
-KeyFor: forLoopr';
+KeyFor: 'for ';
 KeyNamespace: 'space';
 KeyVoid: 'void';
 KeyStruct: 'struct';
@@ -29,13 +29,13 @@ KeyAsync: 'async';
 KeyConst: 'const';
 KeyNew: 'new';
 KeyExtern: 'extern';
-KeyIf: ifStatementf';
-KeyElse: elseStatemente';
+KeyIf: 'if';
+KeyElse: 'else';
 KeyElseIf: 'elseif';
 KeyWhile: 'while';
 KeyExport: 'exp';
 KeyDo: 'do';
-KeySwitch: switchStatementh';
+KeySwitch: 'switch';
 KeyCase: 'case';
 KeyDefault: 'default';
 KeyBreak: 'break';
@@ -43,7 +43,7 @@ KeyContinue: 'continue';
 KeyAwait: 'await';
 KeyTest: 'test';
 KeyInterface: 'iface';
-KeyGoto: gotoStatemento';
+KeyGoto: 'goto';
 KeyTypeOf: 'typeof';
 KeyEnum: 'enum';
 KeyExtends: 'ext';
@@ -80,11 +80,11 @@ Extends: KeyExtends Id;
 // Types.
 TypeInt: 'int' | KeyUnsigned 'int';
 TypeInt64: 'int64' | KeyUnsigned 'int64';
-TypeLong: 'long' | KeyUnsigned 'long'; // Long integer (int128).
+TypeLong: 'long' | KeyUnsigned 'long';
+// Long integer (int128).
 
-TypeShort:
-	'short'
-	| KeyUnsigned 'short'; // Short integer (int16).
+TypeShort: 'short' | KeyUnsigned 'short';
+// Short integer (int16).
 
 TypeFloat: 'float' | KeyUnsigned 'float';
 TypeDouble: 'double' | KeyUnsigned 'double';
@@ -97,7 +97,7 @@ TypeVoid: 'void';
 TypeComplex:
 	'dyn' // Dynamic (infered by compiler).
 	| 'type' // Entity type (ex. str, int, etc.).
-	| anyType'; // Function reference.
+	| 'ref'; // Function reference.
 
 // Operators.
 OpBin:
